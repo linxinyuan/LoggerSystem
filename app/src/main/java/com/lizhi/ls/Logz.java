@@ -108,6 +108,10 @@ public final class Logz {
         TREE_OF_SOULS.v(t);
     }
 
+    public static void v(Object o) {
+        TREE_OF_SOULS.v(o);
+    }
+
     public static void d(String message, Object... args) {
         TREE_OF_SOULS.d(message, args);
     }
@@ -118,6 +122,10 @@ public final class Logz {
 
     public static void d(Throwable t) {
         TREE_OF_SOULS.d(t);
+    }
+
+    public static void d(Object o) {
+        TREE_OF_SOULS.d(o);
     }
 
     public static void i(String message, Object... args) {
@@ -132,6 +140,10 @@ public final class Logz {
         TREE_OF_SOULS.i(t);
     }
 
+    public static void i(Object o) {
+        TREE_OF_SOULS.i(o);
+    }
+
     public static void w(String message, Object... args) {
         TREE_OF_SOULS.w(message, args);
     }
@@ -142,6 +154,10 @@ public final class Logz {
 
     public static void w(Throwable t) {
         TREE_OF_SOULS.w(t);
+    }
+
+    public static void w(Object o) {
+        TREE_OF_SOULS.w(o);
     }
 
     public static void e(String message, Object... args) {
@@ -156,6 +172,10 @@ public final class Logz {
         TREE_OF_SOULS.e(t);
     }
 
+    public static void e(Object o) {
+        TREE_OF_SOULS.e(o);
+    }
+
     public static void wtf(String message, Object... args) {
         TREE_OF_SOULS.wtf(message, args);
     }
@@ -166,6 +186,10 @@ public final class Logz {
 
     public static void wtf(Throwable t) {
         TREE_OF_SOULS.wtf(t);
+    }
+
+    public static void wtf(Object o) {
+        TREE_OF_SOULS.wtf(o);
     }
 
     //log json

@@ -8,7 +8,7 @@ import com.lizhi.ls.common.LogzConstant;
  * Desc : android dev
  */
 public interface IParser<T> {
-    String LINE_SEPARATOR = LogzConstant.BR;
+    Class<T> parseClassType();
 
     String parseString(T t);
 }

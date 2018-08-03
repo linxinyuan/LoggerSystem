@@ -43,6 +43,14 @@ public class SoulsTree extends Tree {
     }
 
     @Override
+    public void v(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].v(o);
+        }
+    }
+
+    @Override
     public void d(String message, Object... args) {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
@@ -63,6 +71,14 @@ public class SoulsTree extends Tree {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
             forest[i].d(t);
+        }
+    }
+
+    @Override
+    public void d(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].d(o);
         }
     }
 
@@ -91,6 +107,14 @@ public class SoulsTree extends Tree {
     }
 
     @Override
+    public void i(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].i(o);
+        }
+    }
+
+    @Override
     public void w(String message, Object... args) {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
@@ -111,6 +135,14 @@ public class SoulsTree extends Tree {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
             forest[i].w(t);
+        }
+    }
+
+    @Override
+    public void w(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].w(o);
         }
     }
 
@@ -139,6 +171,14 @@ public class SoulsTree extends Tree {
     }
 
     @Override
+    public void e(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].e(o);
+        }
+    }
+
+    @Override
     public void wtf(String message, Object... args) {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
@@ -159,6 +199,14 @@ public class SoulsTree extends Tree {
         Tree[] forest = forestAsArray;
         for (int i = 0; i < forest.length; i++) {
             forest[i].wtf(t);
+        }
+    }
+
+    @Override
+    public void wtf(Object o) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].wtf(o);
         }
     }
 

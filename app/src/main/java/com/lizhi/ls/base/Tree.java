@@ -67,6 +67,11 @@ public abstract class Tree implements ITree {
     }
 
     @Override
+    public void v(Object o) {
+        prepareLogObject(Log.VERBOSE, o);
+    }
+
+    @Override
     public void d(String message, Object... args) {
         prepareLog(Log.DEBUG, null, message, args);
     }
@@ -79,6 +84,11 @@ public abstract class Tree implements ITree {
     @Override
     public void d(Throwable t) {
         prepareLog(Log.DEBUG, t, null);
+    }
+
+    @Override
+    public void d(Object o) {
+        prepareLogObject(Log.DEBUG, o);
     }
 
     @Override
@@ -97,6 +107,11 @@ public abstract class Tree implements ITree {
     }
 
     @Override
+    public void i(Object o) {
+        prepareLogObject(Log.INFO, o);
+    }
+
+    @Override
     public void w(String message, Object... args) {
         prepareLog(Log.WARN, null, message, args);
     }
@@ -109,6 +124,11 @@ public abstract class Tree implements ITree {
     @Override
     public void w(Throwable t) {
         prepareLog(Log.WARN, t, null);
+    }
+
+    @Override
+    public void w(Object o) {
+        prepareLogObject(Log.WARN, o);
     }
 
     @Override
@@ -127,6 +147,11 @@ public abstract class Tree implements ITree {
     }
 
     @Override
+    public void e(Object o) {
+        prepareLogObject(Log.ERROR, o);
+    }
+
+    @Override
     public void wtf(String message, Object... args) {
         prepareLog(Log.ASSERT, null, message, args);
     }
@@ -142,6 +167,11 @@ public abstract class Tree implements ITree {
     }
 
     @Override
+    public void wtf(Object o) {
+        prepareLogObject(Log.ASSERT, o);
+    }
+
+    @Override
     public void log(int priority, String message, Object... args) {
         prepareLog(priority, null, message, args);
     }
@@ -154,6 +184,11 @@ public abstract class Tree implements ITree {
     @Override
     public void log(int priority, Throwable t) {
         prepareLog(priority, t, null);
+    }
+
+    @Override
+    public void log(int priority, Object o) {
+        prepareLogObject(priority, o);
     }
 
     @Override
@@ -194,6 +229,10 @@ public abstract class Tree implements ITree {
         } catch (TransformerException e) {
             e(e.toString() + "\n\nxml = " + xml);
         }
+    }
+
+    private void prepareLogObject(int priority, Object o){
+        prepareLog(priority, null, LogzConvert.objectToString(o));
     }
 
     private void prepareLog(int priority, Throwable t, String message, Object... args) {
