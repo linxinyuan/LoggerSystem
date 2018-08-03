@@ -1,10 +1,10 @@
 package com.lizhi.ls.common;
 
 import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.parses.ArrayParser;
 import com.lizhi.ls.parses.IParser;
-import com.lizhi.ls.parses.CollectionParse;
-import com.lizhi.ls.parses.IntentParse;
-import com.lizhi.ls.parses.MapParse;
+import com.lizhi.ls.parses.CollectionParser;
+import com.lizhi.ls.parses.MapParser;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class LogzConstant {
     public static final String BR = System.getProperty("line.separator");// 换行符
 
     public static final Class<? extends IParser>[] DEFAULT_PARSE_CLASS = new Class[]{
-            IntentParse.class, CollectionParse.class, MapParse.class
+            ArrayParser.class, CollectionParser.class, MapParser.class
     };
 
     public static List<IParser> getParserList() {

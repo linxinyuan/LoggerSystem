@@ -7,7 +7,7 @@ import java.util.Collection;
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public class CollectionParse implements IParser {
+public class CollectionParser implements IParser {
     @Override
     public Class parseClassType() {
         return Collection.class;

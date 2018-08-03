@@ -7,7 +7,7 @@ import java.util.Map;
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public class MapParse implements IParser {
+public class MapParser implements IParser {
     @Override
     public Class parseClassType() {
         return Map.class;

@@ -1,16 +1,16 @@
 package com.lizhi.ls.parses;
 
-import android.content.Intent;
+import java.util.Arrays;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/03
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public class IntentParse implements IParser {
+public class ArrayParser implements IParser {
     @Override
     public Class parseClassType() {
-        return Intent.class;
+        return Arrays.class;
     }
 
     @Override
