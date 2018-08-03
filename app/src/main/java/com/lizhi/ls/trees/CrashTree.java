@@ -10,6 +10,18 @@ import com.lizhi.ls.base.Tree;
 public class CrashTree extends Tree {
     @Override
     protected void log(int type, String tag, String message) {
+        // TODO add log entry to circular buffer.
+    }
 
+    public static void logWarning(Throwable t) {
+        // TODO report non-fatal warning.
+    }
+
+    public static void logError(Throwable t) {
+        // TODO report non-fatal error.
+    }
+
+    private CrashTree() {
+        throw new AssertionError("No instances.");
     }
 }
