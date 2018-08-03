@@ -1,13 +1,11 @@
 package com.lizhi.ls.common;
 
-import com.lizhi.ls.Logz;
+import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.parses.ArrayParser;
 import com.lizhi.ls.parses.IParser;
-
-import org.xml.sax.Parser;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -44,14 +42,28 @@ public class LogzConvert {
      * @return
      */
     public static String objectToString(Object object) {
+        return objectToString(object, 0);
+    }
+
+    /**
+     * 将对象转化为String
+     *
+     * @param object
+     * @param childLevel -> 解析对象的最大层级
+     * @return
+     */
+    public static String objectToString(Object object, int childLevel) {
         if (object == null) {
             return LogzConstant.TIP_OBJECT_NULL;
         }
-        // change if is array
-        if (object.getClass().isArray()) {
-            return parseArray(object);
+        if (childLevel > LogzConfigCenter.getInstance().getParserLevel()) {
+            return object.toString();
         }
-        // change by parser
+        // 对数组类型的进行转化(独立为一个分支判断是因为Object无法跟Array进行判断)
+        if (object.getClass().isArray()) {
+            return ArrayParser.getInstance().parseString(object);
+        }
+        // 通过自定义解析器解析(Map/Collection),支持自定义装配解析器
         if (LogzConstant.getParserList() != null && LogzConstant.getParserList().size() > 0) {
             for (IParser parser : LogzConstant.getParserList()) {
                 if (parser.parseClassType().isAssignableFrom(object.getClass())) {
@@ -59,108 +71,99 @@ public class LogzConvert {
                 }
             }
         }
-        //default change
-        return object.toString();
-    }
-
-    /**
-     * 将数组内容转化为字符串
-     *
-     * @param array
-     * @return
-     */
-    private static String parseArray(Object array) {
-        StringBuilder result = new StringBuilder();
-        traverseArray(result, array);
-        return result.toString();
-    }
-
-    /**
-     * 遍历数组
-     *
-     * @param result
-     * @param array
-     */
-    private static void traverseArray(StringBuilder result, Object array) {
-        if (getArrayDimension(array) == 1) {
-            switch (getArrayType(array)) {
-                case 'I':
-                    result.append(Arrays.toString((int[]) array));
-                    break;
-                case 'D':
-                    result.append(Arrays.toString((double[]) array));
-                    break;
-                case 'Z':
-                    result.append(Arrays.toString((boolean[]) array));
-                    break;
-                case 'B':
-                    result.append(Arrays.toString((byte[]) array));
-                    break;
-                case 'S':
-                    result.append(Arrays.toString((short[]) array));
-                    break;
-                case 'J':
-                    result.append(Arrays.toString((long[]) array));
-                    break;
-                case 'F':
-                    result.append(Arrays.toString((float[]) array));
-                    break;
-                case 'L':
-                    Object[] objects = (Object[]) array;
-                    result.append("[");
-                    for (int i = 0; i < objects.length; ++i) {
-                        result.append(objectToString(objects[i]));
-                        if (i != objects.length - 1) {
-                            result.append(",");
-                        }
-                    }
-                    result.append("]");
-                    break;
-                default:
-                    result.append(Arrays.toString((Object[]) array));
-                    break;
-            }
-        } else {
-            result.append("[");
-            for (int i = 0; i < ((Object[]) array).length; i++) {
-                traverseArray(result, ((Object[]) array)[i]);
-                if (i != ((Object[]) array).length - 1) {
-                    result.append(",");
+        // 对Object进行解析(反射会耗费一定性能,不建议调用)
+        if (object.toString().startsWith(object.getClass().getName() + "@")) {
+            StringBuilder builder = new StringBuilder();
+            //往下解析类成员属性，最大子类层次默认为1
+            getClassFields(object.getClass(), builder, object, false, childLevel);
+            //往上解析父类属性，最大父类层次默认为1
+            for (int i = 0; i < LogzConfigCenter.getInstance().getParserLevel(); i++){
+                Class superClass = object.getClass().getSuperclass();
+                while (!superClass.equals(Object.class)) {
+                    getClassFields(superClass, builder, object, true, childLevel);
+                    superClass = superClass.getSuperclass();
                 }
             }
-            result.append("]");
+            return builder.toString();
+        } else {
+            // 若对象重写toString()方法默认走toString()
+            return object.toString();
         }
     }
 
     /**
-     * 获取数组的纬度
+     * 拼接class的字段和值
      *
+     * @param cla
+     * @param builder
      * @param object
-     * @return
+     * @param isSubClass
+     * @param childOffset
      */
-    private static int getArrayDimension(Object object) {
-        int dim = 0;
-        for (int i = 0; i < object.toString().length(); ++i) {
-            if (object.toString().charAt(i) == '[') {
-                ++dim;
-            } else {
-                break;
+    private static void getClassFields(Class cla, StringBuilder builder, Object object, boolean isSubClass, int childOffset) {
+        if (cla.equals(Object.class)) {
+            return;
+        }
+        //是否是解析类的超类,添加换行符 + "=>"
+        if (isSubClass) {
+            builder.append(LogzConstant.BR).append(LogzConstant.BR).append("=> ");
+        }
+        String breakLine = "";
+        builder.append(cla.getSimpleName()).append(" {");
+        //反射获取对象内属性,不局限于public修饰符
+        Field[] fields = cla.getDeclaredFields();
+        for (int i = 0; i < fields.length; ++i) {
+            Field field = fields[i];
+            field.setAccessible(true);
+            if (cla.isMemberClass() && !isStaticInnerClass(cla) && i == 0) {
+                continue;
+            }
+            Object subObject = null;
+            try {
+                subObject = field.get(object);
+            } catch (IllegalAccessException e) {
+                subObject = e;
+            } finally {
+                //解析自己与类成员属性/解析父类对象
+                if (subObject != null) {
+                    if (!isStaticInnerClass(cla) && (field.getName().equals("$change")
+                            || field.getName().equalsIgnoreCase("this$0"))) {
+                        continue;
+                    }
+                    if (subObject instanceof String) {
+                        subObject = "\"" + subObject + "\"";
+                    } else if (subObject instanceof Character) {
+                        subObject = "\'" + subObject + "\'";
+                    }
+                    if (childOffset < LogzConfigCenter.getInstance().getParserLevel()) {
+                        subObject = objectToString(subObject, childOffset + 1);
+                    }
+                }
+                String formatString = breakLine + "%s = %s, ";
+                builder.append(String.format(formatString, field.getName(),
+                        subObject == null ? "null" : subObject.toString()));
             }
         }
-        return dim;
+        if (builder.toString().endsWith("{")) {
+            builder.append("}");
+        } else {
+            builder.replace(builder.length() - 2, builder.length() - 1, breakLine + "}");
+        }
     }
 
     /**
-     * 获取数组类型
+     * 是否为静态内部类
      *
-     * @param object 如L为int型
+     * @param cla
      * @return
      */
-    private static char getArrayType(Object object) {
-        if (object.getClass().isArray()) {
-            String str = object.toString();
-            return str.substring(str.lastIndexOf("[") + 1, str.lastIndexOf("[") + 2).charAt(0);
+    private static boolean isStaticInnerClass(Class cla) {
+        if (cla != null && cla.isMemberClass()) {
+            int modifiers = cla.getModifiers();
+            if ((modifiers & Modifier.STATIC) == Modifier.STATIC) {
+                return true;
+            }
         }
-        return 0;
+        return false;
     }
 }

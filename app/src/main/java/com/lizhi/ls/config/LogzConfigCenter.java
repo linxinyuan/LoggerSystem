@@ -19,6 +19,7 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
     private boolean isShowBorder = false;
     private int mimLogLevel = Log.VERBOSE;
     private List<IParser> mParserList;
+    private int mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
 
     private LogzConfigCenter() {
         addLogzParserClass(LogzConstant.DEFAULT_PARSE_CLASS);
@@ -58,6 +59,15 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
     }
 
     @Override
+    public ILogzGlobalConfig configClassParserLevel(int parserLevel) {
+        if (parserLevel < 0 || parserLevel > 2)
+            mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
+        else
+            mParserLevel = parserLevel;
+        return this;
+    }
+
+    @Override
     public ILogzGlobalConfig addLogzParserClass(Class<? extends IParser>... parsers){
         mParserList = new ArrayList<IParser>();//list init
         for (Class<? extends IParser> cla : parsers) {
@@ -89,5 +99,9 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
 
     public List<IParser> getParserList() {
         return mParserList;
+    }
+
+    public int getParserLevel() {
+        return mParserLevel;
     }
 }

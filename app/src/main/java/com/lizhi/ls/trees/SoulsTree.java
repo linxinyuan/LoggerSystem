@@ -5,7 +5,7 @@ import com.lizhi.ls.base.Tree;
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : android dev
+ * Desc : 灵魂之树(采用代理模式进行日志往各个渠道的分发)
  */
 public class SoulsTree extends Tree {
     private volatile Tree[] forestAsArray = new Tree[0];

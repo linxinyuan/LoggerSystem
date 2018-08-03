@@ -26,13 +26,13 @@ public final class Logz {
     }
 
     // default config change
-    public static ILogzGlobalConfig getLogConfigCenter(){
+    public static ILogzGlobalConfig getLogConfigCenter() {
         return LOG_CONFIG_CENTER;
     }
 
     // temp tag use only once
-    public static ITree tag(String tempTag){
-        return ((SoulsTree)TREE_OF_SOULS).tag(tempTag);
+    public static ITree tag(String tempTag) {
+        return ((SoulsTree) TREE_OF_SOULS).tag(tempTag);
     }
 
     // add new log tree
@@ -62,7 +62,7 @@ public final class Logz {
     // remove log tree
     public static void uproot(Tree tree) {
         synchronized (FOREST) {
-            if (!FOREST.remove(tree)){
+            if (!FOREST.remove(tree)) {
                 throw new IllegalArgumentException("Cannot uproot tree which is not planted: " + tree);
             }
             ((SoulsTree) TREE_OF_SOULS).setForestAsArray(FOREST.toArray(new Tree[FOREST.size()]));
@@ -193,12 +193,12 @@ public final class Logz {
     }
 
     //log json
-    public static void json(String j){
+    public static void json(String j) {
         TREE_OF_SOULS.json(j);
     }
 
     //log xml
-    public static void xml(String x){
+    public static void xml(String x) {
         TREE_OF_SOULS.xml(x);
     }
 }

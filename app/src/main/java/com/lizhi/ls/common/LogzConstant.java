@@ -22,13 +22,14 @@ public class LogzConstant {
 
     public static final int LINE_MAX = 1024 * 3;// 最大日志长度
     public static final int CALL_STACK_INDEX = 5;// 堆栈寻址下标
-    public static final int JSON_PRINT_INDENT = 4;// json输出缩进
+    public static final int JSON_PRINT_INDENT = 4;// Json输出缩进
+    public static final int MAX_CHILD_LEVEL = 1;//Object最大解析层级(父子)
 
     public static final String TIP_OBJECT_NULL = "Object[object is null]";//空类
     public static final String BR = System.getProperty("line.separator");// 换行符
 
     public static final Class<? extends IParser>[] DEFAULT_PARSE_CLASS = new Class[]{
-            ArrayParser.class, CollectionParser.class, MapParser.class
+            CollectionParser.class, MapParser.class
     };
 
     public static List<IParser> getParserList() {

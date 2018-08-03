@@ -20,6 +20,9 @@ public interface ILogzGlobalConfig {
     //设置全局日志tag前缀
     ILogzGlobalConfig configGlobalPrefix(String globalPrefix);
 
+    //设置解析类(父类与类成员)层级(考虑到反射效率,取值范围限定是0-2,默认为1)
+    ILogzGlobalConfig configClassParserLevel(int parserLevel);
+
     //添加自定义解析器
     ILogzGlobalConfig addLogzParserClass(Class<? extends IParser>... classes);
 }
