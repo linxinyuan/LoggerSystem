@@ -5,7 +5,7 @@ package com.lizhi.ls.common;
  * Email : linxinyuan@lizhi.fm
  * Desc : 日志常量类
  */
-public class TLogConstant {
+public class LogzConstant {
     // 分割线方位
     public static final int DIVIDER_TOP = 1;
     public static final int DIVIDER_BOTTOM = 2;

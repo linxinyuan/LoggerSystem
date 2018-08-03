@@ -1,7 +1,7 @@
 package com.lizhi.ls;
 
-import com.lizhi.ls.config.ITLogGlobalConfig;
-import com.lizhi.ls.config.TLogConfigCenter;
+import com.lizhi.ls.config.ILogzGlobalConfig;
+import com.lizhi.ls.config.LogzConfigCenter;
 import com.lizhi.ls.inner.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 import com.lizhi.ls.inner.Tree;
@@ -16,17 +16,17 @@ import static java.util.Collections.unmodifiableList;
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public final class TLn {
+public final class Logz {
     private static final Tree TREE_OF_SOULS = new SoulsTree();
     private static final List<Tree> FOREST = new ArrayList<>();
-    private static final TLogConfigCenter LOG_CONFIG_CENTER = TLogConfigCenter.getInstance();
+    private static final LogzConfigCenter LOG_CONFIG_CENTER = LogzConfigCenter.getInstance();
 
-    private TLn() {
+    private Logz() {
         throw new AssertionError("No instances.");
     }
 
     // default config change
-    public static ITLogGlobalConfig getLogConfigCenter(){
+    public static ILogzGlobalConfig getLogConfigCenter(){
         return LOG_CONFIG_CENTER;
     }
 

@@ -7,43 +7,43 @@ import android.util.Log;
  * Email : linxinyuan@lizhi.fm
  * Desc : log日志系统全局配置中心
  */
-public class TLogConfigCenter implements ITLogGlobalConfig {
+public class LogzConfigCenter implements ILogzGlobalConfig {
     private String globalPrefix;
     private boolean isEnable = true;
     private boolean isShowBorder = false;
     private int mimLogLevel = Log.VERBOSE;
 
-    private TLogConfigCenter() {
+    private LogzConfigCenter() {
     }
 
-    public static TLogConfigCenter getInstance() {
+    public static LogzConfigCenter getInstance() {
         return TLogConfigCenterInstance.INSTANCE;
     }
 
     public static class TLogConfigCenterInstance {
-        private static final TLogConfigCenter INSTANCE = new TLogConfigCenter();
+        private static final LogzConfigCenter INSTANCE = new LogzConfigCenter();
     }
 
     @Override
-    public ITLogGlobalConfig configAllowLog(boolean allowLog) {
+    public ILogzGlobalConfig configAllowLog(boolean allowLog) {
         this.isEnable = allowLog;
         return this;
     }
 
     @Override
-    public ITLogGlobalConfig configShowBorders(boolean showBorder) {
+    public ILogzGlobalConfig configShowBorders(boolean showBorder) {
         this.isShowBorder = showBorder;
         return this;
     }
 
     @Override
-    public ITLogGlobalConfig configMimLogLevel(int mimLogLevel) {
+    public ILogzGlobalConfig configMimLogLevel(int mimLogLevel) {
         this.mimLogLevel = mimLogLevel;
         return this;
     }
 
     @Override
-    public ITLogGlobalConfig configGlobalPrefix(String globalPrefix) {
+    public ILogzGlobalConfig configGlobalPrefix(String globalPrefix) {
         this.globalPrefix = globalPrefix;
         return this;
     }

@@ -1,14 +1,11 @@
 package com.lizhi.ls.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public class TLogConvert {
+public class LogzConvert {
     /**
      * 日志框分割线打印
      *
@@ -17,13 +14,13 @@ public class TLogConvert {
      */
     public static String printDividingLine(int dividerTop) {
         switch (dividerTop) {
-            case TLogConstant.DIVIDER_TOP:
+            case LogzConstant.DIVIDER_TOP:
                 return "╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════";
-            case TLogConstant.DIVIDER_BOTTOM:
+            case LogzConstant.DIVIDER_BOTTOM:
                 return "╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════";
-            case TLogConstant.DIVIDER_NORMAL:
+            case LogzConstant.DIVIDER_NORMAL:
                 return "║ ";
-            case TLogConstant.DIVIDER_CENTER:
+            case LogzConstant.DIVIDER_CENTER:
                 return "╟───────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
             default:
                 break;

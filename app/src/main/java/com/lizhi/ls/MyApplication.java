@@ -13,10 +13,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
-            TLn.getLogConfigCenter()
+            Logz.getLogConfigCenter()
                     .configAllowLog(true)
                     .configShowBorders(true);
-            TLn.plant(new DebugTree());
+            Logz.plant(new DebugTree());
         }
     }
 }
