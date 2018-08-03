@@ -3,7 +3,7 @@ package com.lizhi.ls.common;
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : android dev
+ * Desc : Logz转化类
  */
 public class LogzConvert {
     /**

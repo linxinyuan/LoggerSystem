@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logz.json("{'a': 'a','b': {'ba':'ba', 'bb':'bb'}}");
+                Logz.tag("linxinyuan").xml("<xyy><test1><test2>key</test2></test1><test3>name</test3><test4>value</test4></xyy>");
             }
         });
     }

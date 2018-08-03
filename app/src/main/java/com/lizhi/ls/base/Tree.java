@@ -1,4 +1,4 @@
-package com.lizhi.ls.inner;
+package com.lizhi.ls.base;
 
 import android.os.Build;
 import android.text.TextUtils;
@@ -8,6 +8,7 @@ import com.lizhi.ls.Logz;
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzConvert;
 import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 
 import org.json.JSONArray;

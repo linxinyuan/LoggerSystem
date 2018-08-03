@@ -2,9 +2,9 @@ package com.lizhi.ls;
 
 import com.lizhi.ls.config.ILogzGlobalConfig;
 import com.lizhi.ls.config.LogzConfigCenter;
-import com.lizhi.ls.inner.ITree;
+import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
-import com.lizhi.ls.inner.Tree;
+import com.lizhi.ls.base.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import static java.util.Collections.unmodifiableList;
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : android dev
+ * Desc : 日志输出工具类
  */
 public final class Logz {
     private static final Tree TREE_OF_SOULS = new SoulsTree();

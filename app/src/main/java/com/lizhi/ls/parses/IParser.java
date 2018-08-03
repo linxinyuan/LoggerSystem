@@ -7,7 +7,7 @@ import com.lizhi.ls.common.LogzConstant;
  * Email : linxinyuan@lizhi.fm
  * Desc : android dev
  */
-public interface Parse<T> {
+public interface IParser<T> {
     String LINE_SEPARATOR = LogzConstant.BR;
 
     String parseString(T t);

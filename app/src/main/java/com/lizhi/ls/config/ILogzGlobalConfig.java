@@ -1,9 +1,11 @@
 package com.lizhi.ls.config;
 
+import com.lizhi.ls.parses.IParser;
+
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : log系统全局配置接口类
+ * Desc : logz系统全局配置接口类
  */
 public interface ILogzGlobalConfig {
     //设置是否输出日志
@@ -17,4 +19,7 @@ public interface ILogzGlobalConfig {
 
     //设置全局日志tag前缀
     ILogzGlobalConfig configGlobalPrefix(String globalPrefix);
+
+    //添加自定义解析器
+    ILogzGlobalConfig addLogzParserClass(Class<? extends IParser>... classes);
 }

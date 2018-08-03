@@ -2,18 +2,26 @@ package com.lizhi.ls.config;
 
 import android.util.Log;
 
+import com.lizhi.ls.common.LogzConstant;
+import com.lizhi.ls.parses.IParser;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : log日志系统全局配置中心
+ * Desc : logz日志系统全局配置中心
  */
 public class LogzConfigCenter implements ILogzGlobalConfig {
     private String globalPrefix;
     private boolean isEnable = true;
     private boolean isShowBorder = false;
     private int mimLogLevel = Log.VERBOSE;
+    private List<IParser> mParserList;
 
     private LogzConfigCenter() {
+        addLogzParserClass(LogzConstant.DEFAULT_PARSE_CLASS);
     }
 
     public static LogzConfigCenter getInstance() {
@@ -23,6 +31,7 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
     public static class TLogConfigCenterInstance {
         private static final LogzConfigCenter INSTANCE = new LogzConfigCenter();
     }
+
 
     @Override
     public ILogzGlobalConfig configAllowLog(boolean allowLog) {
@@ -48,6 +57,20 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
         return this;
     }
 
+    @Override
+    public ILogzGlobalConfig addLogzParserClass(Class<? extends IParser>... parsers){
+        mParserList = new ArrayList<IParser>();//list init
+        for (Class<? extends IParser> cla : parsers) {
+            try {
+                mParserList.add(0, cla.newInstance());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return this;
+    }
+
+
     public boolean isEnable() {
         return this.isEnable;
     }
@@ -62,5 +85,9 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
 
     public boolean isShowBorder() {
         return isShowBorder;
+    }
+
+    public List<IParser> getParserList() {
+        return mParserList;
     }
 }

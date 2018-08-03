@@ -1,9 +1,6 @@
 package com.lizhi.ls.trees;
 
-import android.util.Log;
-
-import com.lizhi.ls.inner.ITree;
-import com.lizhi.ls.inner.Tree;
+import com.lizhi.ls.base.Tree;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
