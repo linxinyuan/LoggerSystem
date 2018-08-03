@@ -1,0 +1,330 @@
+package com.lizhi.ls.inner;
+
+import android.os.Build;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.lizhi.ls.TLn;
+import com.lizhi.ls.common.TLogConstant;
+import com.lizhi.ls.common.TLogConvert;
+import com.lizhi.ls.config.TLogConfigCenter;
+import com.lizhi.ls.trees.SoulsTree;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Author : Create by Linxinyuan on 2018/08/02
+ * Email : linxinyuan@lizhi.fm
+ * Desc : android dev
+ */
+public abstract class Tree implements ITree {
+    private final ThreadLocal<String> localTags = new ThreadLocal<>();
+    private TLogConfigCenter mTLogConfig;
+
+    public Tree() {
+        mTLogConfig = TLogConfigCenter.getInstance();
+    }
+
+    public ITree setTag(String tag) {
+        if (!TextUtils.isEmpty(tag) && mTLogConfig.isEnable()) {
+            localTags.set(tag);
+        }
+        return this;
+    }
+
+    @Override
+    public void v(String message, Object... args) {
+        prepareLog(Log.VERBOSE, null, message, args);
+    }
+
+    @Override
+    public void v(Throwable t, String message, Object... args) {
+        prepareLog(Log.VERBOSE, t, message, args);
+    }
+
+    @Override
+    public void v(Throwable t) {
+        prepareLog(Log.VERBOSE, t, null);
+    }
+
+    @Override
+    public void d(String message, Object... args) {
+        prepareLog(Log.DEBUG, null, message, args);
+    }
+
+    @Override
+    public void d(Throwable t, String message, Object... args) {
+        prepareLog(Log.DEBUG, t, message, args);
+    }
+
+    @Override
+    public void d(Throwable t) {
+        prepareLog(Log.DEBUG, t, null);
+    }
+
+    @Override
+    public void i(String message, Object... args) {
+        prepareLog(Log.INFO, null, message, args);
+    }
+
+    @Override
+    public void i(Throwable t, String message, Object... args) {
+        prepareLog(Log.INFO, t, message, args);
+    }
+
+    @Override
+    public void i(Throwable t) {
+        prepareLog(Log.INFO, t, null);
+    }
+
+    @Override
+    public void w(String message, Object... args) {
+        prepareLog(Log.WARN, null, message, args);
+    }
+
+    @Override
+    public void w(Throwable t, String message, Object... args) {
+        prepareLog(Log.WARN, t, message, args);
+    }
+
+    @Override
+    public void w(Throwable t) {
+        prepareLog(Log.WARN, t, null);
+    }
+
+    @Override
+    public void e(String message, Object... args) {
+        prepareLog(Log.ERROR, null, message, args);
+    }
+
+    @Override
+    public void e(Throwable t, String message, Object... args) {
+        prepareLog(Log.ERROR, t, message, args);
+    }
+
+    @Override
+    public void e(Throwable t) {
+        prepareLog(Log.ERROR, t, null);
+    }
+
+    @Override
+    public void wtf(String message, Object... args) {
+        prepareLog(Log.ASSERT, null, message, args);
+    }
+
+    @Override
+    public void wtf(Throwable t, String message, Object... args) {
+        prepareLog(Log.ASSERT, t, message, args);
+    }
+
+    @Override
+    public void wtf(Throwable t) {
+        prepareLog(Log.ASSERT, t, null);
+    }
+
+    public void log(int priority, String message, Object... args) {
+        prepareLog(priority, null, message, args);
+    }
+
+    public void log(int priority, Throwable t, String message, Object... args) {
+        prepareLog(priority, t, message, args);
+    }
+
+    public void log(int priority, Throwable t) {
+        prepareLog(priority, t, null);
+    }
+
+    @Override
+    public void json(String json) {
+
+    }
+
+    @Override
+    public void xml(String xml) {
+
+    }
+
+    private void prepareLog(int priority, Throwable t, String message, Object... args) {
+        //not allow log output
+        if (!mTLogConfig.isEnable()) {
+            return;
+        }
+        //target log level mim than minLogOutputLevel
+        if (priority < mTLogConfig.getLogLevel()) {
+            return;
+        }
+        //get tag (custom/global/class_name)
+        String tagPrefix = generateTag();
+        if (TextUtils.isEmpty(tagPrefix)) {
+            return;
+        }
+        //get combine log msg
+        message = getCombineLogMsg(t, message, args);
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
+        //do not need cut message
+        if (message.length() > TLogConstant.LINE_MAX) {
+            if (mTLogConfig.isShowBorder()) {
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_TOP));
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_NORMAL) + getTopStackInfo());
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_CENTER));
+                for (String sub : message.split(TLogConstant.BR)) {
+                    printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_NORMAL) + sub);
+                }
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_BOTTOM));
+            } else {
+                printLog(priority, tagPrefix, message);
+            }
+            return;
+        }
+        // split by line, then ensure each line can fit into Log's maximum length.
+        if (message.length() < TLogConstant.LINE_MAX) {
+            List<String> subList = getSplitMessageList(message);
+            if (mTLogConfig.isShowBorder()) {
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_TOP));
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_NORMAL) + getTopStackInfo());
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_CENTER));
+                for (String sub : subList) {
+                    printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_NORMAL) + sub);
+                }
+                printLog(priority, tagPrefix, TLogConvert.printDividingLine(TLogConstant.DIVIDER_BOTTOM));
+                return;
+            } else {
+                for (String sub : subList) {
+                    printLog(priority, tagPrefix, sub);
+                }
+            }
+            return;
+        }
+    }
+
+    private List<String> getSplitMessageList(String message) {
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0, length = message.length(); i < length; i++) {
+            int newline = message.indexOf('\n', i);
+            newline = newline != -1 ? newline : length;
+            do {
+                int end = Math.min(newline, i + TLogConstant.LINE_MAX);
+                String part = message.substring(i, end);
+                stringList.add(part);
+                i = end;
+            } while (i < newline);
+        }
+        return stringList;
+    }
+
+    private String generateTag() {
+        String tempTag = localTags.get();
+        //custom tag
+        if (!TextUtils.isEmpty(tempTag)) {
+            localTags.remove();
+            return tempTag;
+        }
+        // global tag
+        if (!TextUtils.isEmpty(mTLogConfig.getGlobalPrefix())) {
+            return mTLogConfig.getGlobalPrefix();
+        }
+        // class tag
+        return createStackElementTag(getCurrentStackTrace());
+    }
+
+    private String createStackElementTag(StackTraceElement element) {
+        try {
+            final int MAX_TAG_LENGTH = 23;
+            final Pattern ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$");
+
+            String tag = element.getClassName();
+            Matcher m = ANONYMOUS_CLASS.matcher(tag);
+            if (m.find()) {
+                tag = m.replaceAll("");
+            }
+            tag = tag.substring(tag.lastIndexOf('.') + 1);
+            // Tag length limit was removed in API
+            if (tag.length() <= MAX_TAG_LENGTH || Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                return tag;
+            }
+            return tag.substring(0, MAX_TAG_LENGTH);
+        } catch (Exception exception) {
+            e(exception.toString());
+        }
+        return null;
+    }
+
+    private String getTopStackInfo() {
+        StackTraceElement caller = getCurrentStackTrace();
+        if (caller == null) {
+            return "";
+        }
+        String stackTrace = caller.toString();
+        stackTrace = stackTrace.substring(stackTrace.lastIndexOf('('), stackTrace.length());
+        String tag = "%s.%s%s";
+        String callerClazzName = caller.getClassName();
+        callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
+        tag = String.format(tag, callerClazzName, caller.getMethodName(), stackTrace);
+        return tag;
+    }
+
+    private StackTraceElement getCurrentStackTrace() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        int stackOffset_tln = getStackOffset(trace, TLn.class);
+        int stackOffset_soul = getStackOffset(trace, SoulsTree.class);
+        //if set custom tag
+        if (stackOffset_tln != -1) {
+            return trace[stackOffset_tln];
+        }
+        if (stackOffset_soul != -1){
+            return trace[stackOffset_soul];
+        }
+        return null;
+    }
+
+    private int getStackOffset(StackTraceElement[] trace, Class cla) {
+        for (int i = TLogConstant.CALL_STACK_INDEX; i < trace.length; i++) {
+            StackTraceElement e = trace[i];
+            String name = e.getClassName();
+            if (cla.equals(TLn.class) && i < trace.length - 1 && trace[i + 1].getClassName().equals(TLn.class.getName())) {
+                continue;
+            }
+            if (name.equals(cla.getName())) {
+                return ++i;
+            }
+        }
+        return -1;
+    }
+
+    private String getCombineLogMsg(Throwable t, String message, Object... args) {
+        if (TextUtils.isEmpty(message)) {
+            if (null == t)
+                return null;
+            return getThrowable2String(t);
+        } else {
+            if (args != null && args.length > 0) {
+                message = String.format(message, args);
+            }
+            if (t != null) {
+                message += "\n" + getThrowable2String(t);
+            }
+        }
+        return message;
+    }
+
+    private String getThrowable2String(Throwable t) {
+        StringWriter sw = new StringWriter(256);
+        PrintWriter pw = new PrintWriter(sw, false);
+        t.printStackTrace(pw);
+        pw.flush();
+        return sw.toString();
+    }
+
+    private void printLog(int priority, String tag, String message) {
+        log(priority, tag, message);
+    }
+
+    protected abstract void log(int type, String tag, String message);
+}
