@@ -13,5 +13,6 @@ public class TLogConstant {
     public static final int DIVIDER_NORMAL = 3;
     public static final int LINE_MAX = 1024 * 3;// 最大日志长度
     public static final int CALL_STACK_INDEX = 5;// 堆栈寻址下标
+    public static final int JSON_PRINT_INDENT = 4;// json输出缩进
     public static final String BR = System.getProperty("line.separator");// 换行符
 }

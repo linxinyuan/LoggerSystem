@@ -165,6 +165,22 @@ public class SoulsTree extends Tree {
         }
     }
 
+    @Override
+    public void json(String j) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].json(j);
+        }
+    }
+
+    @Override
+    public void xml(String x) {
+        Tree[] forest = forestAsArray;
+        for (int i = 0; i < forest.length; i++) {
+            forest[i].xml(x);
+        }
+    }
+
     public ITree[] getForestAsArray() {
         return forestAsArray;
     }

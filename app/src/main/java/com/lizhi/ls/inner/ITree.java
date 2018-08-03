@@ -44,6 +44,6 @@ public interface ITree {
     void log(int priority, Throwable t);
 
     //Log.SPECIAL
-    void json(String json);
-    void xml(String xml);
+    void json(String j);
+    void xml(String x);
 }

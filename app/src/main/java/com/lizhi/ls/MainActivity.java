@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TLn.d(new NullPointerException("null"));
+                TLn.json("{'a': 'a','b': {'ba':'ba', 'bb':'bb'}}");
             }
         });
     }

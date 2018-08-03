@@ -169,11 +169,12 @@ public final class TLn {
     }
 
     //log json
-    public static void json(String json){
+    public static void json(String j){
+        TREE_OF_SOULS.json(j);
     }
 
     //log xml
-    public static void xml(String xml){
-
+    public static void xml(String x){
+        TREE_OF_SOULS.xml(x);
     }
 }

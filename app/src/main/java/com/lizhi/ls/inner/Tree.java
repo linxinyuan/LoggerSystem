@@ -10,12 +10,25 @@ import com.lizhi.ls.common.TLogConvert;
 import com.lizhi.ls.config.TLogConfigCenter;
 import com.lizhi.ls.trees.SoulsTree;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -127,26 +140,59 @@ public abstract class Tree implements ITree {
         prepareLog(Log.ASSERT, t, null);
     }
 
+    @Override
     public void log(int priority, String message, Object... args) {
         prepareLog(priority, null, message, args);
     }
 
+    @Override
     public void log(int priority, Throwable t, String message, Object... args) {
         prepareLog(priority, t, message, args);
     }
 
+    @Override
     public void log(int priority, Throwable t) {
         prepareLog(priority, t, null);
     }
 
     @Override
     public void json(String json) {
-
+        if (TextUtils.isEmpty(json)) {
+            d("JSON{json is empty}");
+            return;
+        }
+        try {
+            if (json.startsWith("{")) {
+                JSONObject jsonObject = new JSONObject(json);
+                String msg = jsonObject.toString(TLogConstant.JSON_PRINT_INDENT);
+                d(msg);
+            } else if (json.startsWith("[")) {
+                JSONArray jsonArray = new JSONArray(json);
+                String msg = jsonArray.toString(TLogConstant.JSON_PRINT_INDENT);
+                d(msg);
+            }
+        } catch (JSONException e) {
+            e(e.toString() + "\n\njson = " + json);
+        }
     }
 
     @Override
     public void xml(String xml) {
-
+        if (TextUtils.isEmpty(xml)) {
+            d("XML{xml is empty}");
+            return;
+        }
+        try {
+            Source xmlInput = new StreamSource(new StringReader(xml));
+            StreamResult xmlOutput = new StreamResult(new StringWriter());
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(xmlInput, xmlOutput);
+            d(xmlOutput.getWriter().toString().replaceFirst(">", ">\n"));
+        } catch (TransformerException e) {
+            e(e.toString() + "\n\nxml = " + xml);
+        }
     }
 
     private void prepareLog(int priority, Throwable t, String message, Object... args) {
