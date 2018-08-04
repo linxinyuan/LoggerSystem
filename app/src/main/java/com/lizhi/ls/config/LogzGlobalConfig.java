@@ -13,7 +13,7 @@ import java.util.List;
  * Email : linxinyuan@lizhi.fm
  * Desc : logz日志系统全局配置中心
  */
-public class LogzConfigCenter implements ILogzGlobalConfig {
+public class LogzGlobalConfig implements ILogzGlobalConfig {
     private String globalPrefix;
     private boolean isEnable = true;
     private boolean isShowBorder = false;
@@ -21,16 +21,16 @@ public class LogzConfigCenter implements ILogzGlobalConfig {
     private List<IParser> mParserList;
     private int mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
 
-    private LogzConfigCenter() {
+    private LogzGlobalConfig() {
         addLogzParserClass(LogzConstant.DEFAULT_PARSE_CLASS);
     }
 
-    public static LogzConfigCenter getInstance() {
+    public static LogzGlobalConfig getInstance() {
         return TLogConfigCenterInstance.INSTANCE;
     }
 
     public static class TLogConfigCenterInstance {
-        private static final LogzConfigCenter INSTANCE = new LogzConfigCenter();
+        private static final LogzGlobalConfig INSTANCE = new LogzGlobalConfig();
     }
 
 

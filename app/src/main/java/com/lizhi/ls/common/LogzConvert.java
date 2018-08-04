@@ -1,6 +1,6 @@
 package com.lizhi.ls.common;
 
-import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.config.LogzGlobalConfig;
 import com.lizhi.ls.parses.ArrayParser;
 import com.lizhi.ls.parses.IParser;
 
@@ -56,7 +56,7 @@ public class LogzConvert {
         if (object == null) {
             return LogzConstant.TIP_OBJECT_NULL;
         }
-        if (childLevel > LogzConfigCenter.getInstance().getParserLevel()) {
+        if (childLevel > LogzGlobalConfig.getInstance().getParserLevel()) {
             return object.toString();
         }
         // 对数组类型的进行转化(独立为一个分支判断是因为Object无法跟Array进行判断)
@@ -77,7 +77,7 @@ public class LogzConvert {
             //往下解析类成员属性，最大子类层次默认为1
             getClassFields(object.getClass(), builder, object, false, childLevel);
             //往上解析父类属性，最大父类层次默认为1
-            for (int i = 0; i < LogzConfigCenter.getInstance().getParserLevel(); i++){
+            for (int i = 0; i < LogzGlobalConfig.getInstance().getParserLevel(); i++){
                 Class superClass = object.getClass().getSuperclass();
                 while (!superClass.equals(Object.class)) {
                     getClassFields(superClass, builder, object, true, childLevel);
@@ -135,7 +135,7 @@ public class LogzConvert {
                     } else if (subObject instanceof Character) {
                         subObject = "\'" + subObject + "\'";
                     }
-                    if (childOffset < LogzConfigCenter.getInstance().getParserLevel()) {
+                    if (childOffset < LogzGlobalConfig.getInstance().getParserLevel()) {
                         subObject = objectToString(subObject, childOffset + 1);
                     }
                 }

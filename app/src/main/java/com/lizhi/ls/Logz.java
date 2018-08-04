@@ -1,7 +1,7 @@
 package com.lizhi.ls;
 
 import com.lizhi.ls.config.ILogzGlobalConfig;
-import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.config.LogzGlobalConfig;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 import com.lizhi.ls.base.Tree;
@@ -19,7 +19,7 @@ import static java.util.Collections.unmodifiableList;
 public final class Logz {
     private static final Tree TREE_OF_SOULS = new SoulsTree();
     private static final List<Tree> FOREST = new ArrayList<>();
-    private static final LogzConfigCenter LOG_CONFIG_CENTER = LogzConfigCenter.getInstance();
+    private static final LogzGlobalConfig LOG_CONFIG_CENTER = LogzGlobalConfig.getInstance();
 
     private Logz() {
         throw new AssertionError("No instances.");

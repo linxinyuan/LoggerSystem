@@ -17,11 +17,13 @@ public class MyApplication extends Application {
         super.onCreate();
         if (BuildConfig.DEBUG) {
             Logz.getLogConfigCenter()
-                    .configAllowLog(true)
-                    .configShowBorders(true)
-                    .configClassParserLevel(1);
+                    .configAllowLog(true)//config log can output
+                    .configShowBorders(false)//config if pretty output
+                    .configClassParserLevel(1)//config class paser level
+                    .configMimLogLevel(Log.VERBOSE);//config mim output level
             Logz.plant(new DebugTree());
-            Logz.plant(new FileSaveTree(getApplicationContext(), Log.DEBUG));
+            // if need application context? //TODO
+            Logz.plant(new FileSaveTree(getApplicationContext()));
         }
     }
 }

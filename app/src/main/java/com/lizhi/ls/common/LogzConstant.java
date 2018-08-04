@@ -1,14 +1,10 @@
 package com.lizhi.ls.common;
 
-import android.os.Environment;
-
-import com.lizhi.ls.config.LogzConfigCenter;
-import com.lizhi.ls.parses.ArrayParser;
+import com.lizhi.ls.config.LogzGlobalConfig;
 import com.lizhi.ls.parses.IParser;
 import com.lizhi.ls.parses.CollectionParser;
 import com.lizhi.ls.parses.MapParser;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -36,6 +32,6 @@ public class LogzConstant {
     };
 
     public static List<IParser> getParserList() {
-        return LogzConfigCenter.getInstance().getParserList();
+        return LogzGlobalConfig.getInstance().getParserList();
     }
 }

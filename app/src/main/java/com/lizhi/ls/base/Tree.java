@@ -7,7 +7,7 @@ import android.util.Log;
 import com.lizhi.ls.Logz;
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzConvert;
-import com.lizhi.ls.config.LogzConfigCenter;
+import com.lizhi.ls.config.LogzGlobalConfig;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 
@@ -38,11 +38,11 @@ import javax.xml.transform.stream.StreamSource;
  */
 public abstract class Tree implements ITree {
     private final ThreadLocal<String> localTags = new ThreadLocal<>();
-    private LogzConfigCenter mTLogConfig;//Golbal log output level
+    private LogzGlobalConfig mTLogConfig;//Golbal log output level
     protected int logLevel;//child tree log level custom
 
     public Tree() {
-        mTLogConfig = LogzConfigCenter.getInstance();
+        mTLogConfig = LogzGlobalConfig.getInstance();
         logLevel = mTLogConfig.getLogLevel();//Defalut-Verbose
     }
 
