@@ -43,6 +43,8 @@ public class FileSaveTree extends Tree {
     private String mDirectory;
     private ExecutorService executor;
 
+    //do not need border
+
     private static final String FILE_NAME_VERBOSE = "verbose";
     private static final String FILE_NAME_DEBUG = "debug";
     private static final String FILE_NAME_INFO = "info";
@@ -52,6 +54,10 @@ public class FileSaveTree extends Tree {
     private static final String FILE_NAME_SUFFIX = ".log";
 
     private static final String DEFAULT_PATH = Environment.getExternalStorageDirectory().getPath() + "/LizhiFm/Logz/";
+
+    public FileSaveTree() {
+        this(null);
+    }
 
     public FileSaveTree(Context context) {
         this(context, Log.DEBUG);
@@ -112,6 +118,7 @@ public class FileSaveTree extends Tree {
             }
             final GzipSink gzipSink = new GzipSink(Okio.buffer(Okio.sink(mLogFile)));
             final BufferedSink sink = Okio.buffer(gzipSink);
+            wirteUserPhoneMessage(sink);//write phone message
             Observable.just(1).
                     observeOn(Schedulers.from(executor))
                     .map(new Function<Integer, Boolean>() {
@@ -155,32 +162,37 @@ public class FileSaveTree extends Tree {
      * @param sink
      * @throws Exception
      */
-    public void wirteUserPhoneMessage(BufferedSink sink) throws Exception {
-        //application version name and version code
-        PackageManager packageManager = mContext.getPackageManager();
-        PackageInfo packageInfo = packageManager.getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
-        sink.writeUtf8("App Version:");
-        sink.writeUtf8(packageInfo.versionName);
-        sink.writeUtf8(String.valueOf('_'));
-        sink.writeUtf8(String.valueOf(packageInfo.versionCode) + LogzConstant.BR);
+    public void wirteUserPhoneMessage(BufferedSink sink) {
+        if (null == mContext)
+            return;
+        try {
+            //application version name and version code
+            PackageManager packageManager = mContext.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
+            sink.writeUtf8("App Version:");
+            sink.writeUtf8(packageInfo.versionName);
+            sink.writeUtf8(String.valueOf('_'));
+            sink.writeUtf8(String.valueOf(packageInfo.versionCode) + LogzConstant.BR);
 
-        //phone android version
-        sink.writeUtf8("OS Version:");
-        sink.writeUtf8(Build.VERSION.RELEASE);
-        sink.writeUtf8(String.valueOf('_'));
-        sink.writeUtf8(String.valueOf(Build.VERSION.SDK_INT) + LogzConstant.BR);
+            //phone android version
+            sink.writeUtf8("OS Version:");
+            sink.writeUtf8(Build.VERSION.RELEASE);
+            sink.writeUtf8(String.valueOf('_'));
+            sink.writeUtf8(String.valueOf(Build.VERSION.SDK_INT) + LogzConstant.BR);
 
-        //phone builder
-        sink.writeUtf8("Vendor:");
-        sink.writeUtf8(Build.MANUFACTURER);
+            //phone builder
+            sink.writeUtf8("Vendor:");
+            sink.writeUtf8(Build.MANUFACTURER);
 
-        //phone type
-        sink.writeUtf8("Model:");
-        sink.writeUtf8(Build.MODEL);
+            //phone type
+            sink.writeUtf8("Model:");
+            sink.writeUtf8(Build.MODEL);
 
-        //cpu type
-        sink.writeUtf8("CPU ABI:");
-        sink.writeUtf8(Build.CPU_ABI);
-
+            //cpu type
+            sink.writeUtf8("CPU ABI:");
+            sink.writeUtf8(Build.CPU_ABI);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

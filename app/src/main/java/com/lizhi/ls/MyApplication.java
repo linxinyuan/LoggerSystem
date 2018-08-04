@@ -20,10 +20,12 @@ public class MyApplication extends Application {
                     .configAllowLog(true)//config log can output
                     .configShowBorders(false)//config if pretty output
                     .configClassParserLevel(1)//config class paser level
-                    .configMimLogLevel(Log.VERBOSE);//config mim output level
+                    .configMimLogLevel(Log.VERBOSE)//config mim output level
+                    .configGlobalPrefix("LizhiFM");//config global tag prefix
+
+            //TODO If need application context?
             Logz.plant(new DebugTree());
-            // if need application context? //TODO
-            Logz.plant(new FileSaveTree(getApplicationContext()));
+            Logz.plant(new FileSaveTree());
         }
     }
 }
