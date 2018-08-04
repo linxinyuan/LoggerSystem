@@ -1,7 +1,7 @@
 package com.lizhi.ls;
 
-import com.lizhi.ls.config.ILogzGlobalConfig;
-import com.lizhi.ls.config.LogzGlobalConfig;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 import com.lizhi.ls.base.Tree;
@@ -19,15 +19,15 @@ import static java.util.Collections.unmodifiableList;
 public final class Logz {
     private static final Tree TREE_OF_SOULS = new SoulsTree();
     private static final List<Tree> FOREST = new ArrayList<>();
-    private static final LogzGlobalConfig LOG_CONFIG_CENTER = LogzGlobalConfig.getInstance();
+    private static final LogzConfiger LOG_DEFALUT_CONFIG = new LogzConfiger();
 
     private Logz() {
         throw new AssertionError("No instances.");
     }
 
     // default config change
-    public static ILogzGlobalConfig getLogConfigCenter() {
-        return LOG_CONFIG_CENTER;
+    public static ILogzConfig getLogConfigCenter() {
+        return LOG_DEFALUT_CONFIG;
     }
 
     // temp tag use only once

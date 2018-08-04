@@ -18,7 +18,7 @@ public class MyApplication extends Application {
         if (BuildConfig.DEBUG) {
             Logz.getLogConfigCenter()
                     .configAllowLog(true)//config log can output
-                    .configShowBorders(false)//config if pretty output
+                    .configShowBorders(true)//config if pretty output
                     .configClassParserLevel(1)//config class paser level
                     .configMimLogLevel(Log.VERBOSE)//config mim output level
                     .configGlobalPrefix("LizhiFM");//config global tag prefix

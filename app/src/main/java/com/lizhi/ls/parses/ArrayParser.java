@@ -1,6 +1,7 @@
 package com.lizhi.ls.parses;
 
 import com.lizhi.ls.common.LogzConvert;
+import com.lizhi.ls.config.ILogzConfig;
 
 import java.util.Arrays;
 
@@ -27,9 +28,9 @@ public class ArrayParser implements IParser<Object> {
     }
 
     @Override
-    public String parseString(Object array) {
+    public String parseString(ILogzConfig configer, Object array) {
         StringBuilder result = new StringBuilder();
-        traverseArray(result, array);
+        traverseArray(configer, result, array);
         return result.toString();
     }
 
@@ -39,7 +40,7 @@ public class ArrayParser implements IParser<Object> {
      * @param result
      * @param array
      */
-    private void traverseArray(StringBuilder result, Object array) {
+    private void traverseArray(ILogzConfig configer, StringBuilder result, Object array) {
         if (getArrayDimension(array) == 1) {
             switch (getArrayType(array)) {
                 case 'I'://int
@@ -68,7 +69,7 @@ public class ArrayParser implements IParser<Object> {
                     result.append("[");
                     for (int i = 0; i < objects.length; ++i) {
                         //Object数组需要分单个重新解析
-                        result.append(LogzConvert.objectToString(objects[i]));
+                        result.append(LogzConvert.objectToString(configer, objects[i]));
                         if (i != objects.length - 1) {
                             result.append(",");
                         }
@@ -82,7 +83,7 @@ public class ArrayParser implements IParser<Object> {
         } else {
             result.append("[");
             for (int i = 0; i < ((Object[]) array).length; i++) {
-                traverseArray(result, ((Object[]) array)[i]);
+                traverseArray(configer, result, ((Object[]) array)[i]);
                 if (i != ((Object[]) array).length - 1) {
                     result.append(",");
                 }

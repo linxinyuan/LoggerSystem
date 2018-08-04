@@ -1,6 +1,7 @@
 package com.lizhi.ls.common;
 
-import com.lizhi.ls.config.LogzGlobalConfig;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.parses.ArrayParser;
 import com.lizhi.ls.parses.IParser;
 
@@ -41,8 +42,8 @@ public class LogzConvert {
      * @param object
      * @return
      */
-    public static String objectToString(Object object) {
-        return objectToString(object, 0);
+    public static String objectToString(ILogzConfig configer, Object object) {
+        return objectToString(configer,object, 0);
     }
 
     /**
@@ -52,22 +53,22 @@ public class LogzConvert {
      * @param childLevel -> 解析对象的最大层级
      * @return
      */
-    public static String objectToString(Object object, int childLevel) {
+    public static String objectToString(ILogzConfig configer, Object object, int childLevel) {
         if (object == null) {
             return LogzConstant.TIP_OBJECT_NULL;
         }
-        if (childLevel > LogzGlobalConfig.getInstance().getParserLevel()) {
+        if (childLevel > configer.getParserLevel()) {
             return object.toString();
         }
         // 对数组类型的进行转化(独立为一个分支判断是因为Object无法跟Array进行判断)
         if (object.getClass().isArray()) {
-            return ArrayParser.getInstance().parseString(object);
+            return ArrayParser.getInstance().parseString(configer, object);
         }
         // 通过自定义解析器解析(Map/Collection),支持自定义装配解析器
-        if (LogzConstant.getParserList() != null && LogzConstant.getParserList().size() > 0) {
-            for (IParser parser : LogzConstant.getParserList()) {
+        if (LogzConstant.getParserList(configer) != null && LogzConstant.getParserList(configer).size() > 0) {
+            for (IParser parser : LogzConstant.getParserList(configer)) {
                 if (parser.parseClassType().isAssignableFrom(object.getClass())) {
-                    return parser.parseString(object);
+                    return parser.parseString(configer, object);
                 }
             }
         }
@@ -75,12 +76,12 @@ public class LogzConvert {
         if (object.toString().startsWith(object.getClass().getName() + "@")) {
             StringBuilder builder = new StringBuilder();
             //往下解析类成员属性，最大子类层次默认为1
-            getClassFields(object.getClass(), builder, object, false, childLevel);
+            getClassFields(configer, object.getClass(), builder, object, false, childLevel);
             //往上解析父类属性，最大父类层次默认为1
-            for (int i = 0; i < LogzGlobalConfig.getInstance().getParserLevel(); i++){
+            for (int i = 0; i < configer.getParserLevel(); i++){
                 Class superClass = object.getClass().getSuperclass();
                 while (!superClass.equals(Object.class)) {
-                    getClassFields(superClass, builder, object, true, childLevel);
+                    getClassFields(configer, superClass, builder, object, true, childLevel);
                     superClass = superClass.getSuperclass();
                 }
             }
@@ -100,7 +101,10 @@ public class LogzConvert {
      * @param isSubClass
      * @param childOffset
      */
-    private static void getClassFields(Class cla, StringBuilder builder, Object object, boolean isSubClass, int childOffset) {
+    private static void getClassFields(ILogzConfig configer, Class cla, StringBuilder builder,
+                                       Object
+            object, boolean
+            isSubClass, int childOffset) {
         if (cla.equals(Object.class)) {
             return;
         }
@@ -135,8 +139,8 @@ public class LogzConvert {
                     } else if (subObject instanceof Character) {
                         subObject = "\'" + subObject + "\'";
                     }
-                    if (childOffset < LogzGlobalConfig.getInstance().getParserLevel()) {
-                        subObject = objectToString(subObject, childOffset + 1);
+                    if (childOffset < configer.getParserLevel()) {
+                        subObject = objectToString(configer,subObject, childOffset + 1);
                     }
                 }
                 String formatString = breakLine + "%s = %s, ";

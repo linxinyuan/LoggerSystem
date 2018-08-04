@@ -3,6 +3,8 @@ package com.lizhi.ls.trees;
 import android.util.Log;
 
 import com.lizhi.ls.base.Tree;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -10,12 +12,14 @@ import com.lizhi.ls.base.Tree;
  * Desc : 输出到Logcat的日志树节点(默认日志输出级别为Debug)
  */
 public class DebugTree extends Tree {
-    public DebugTree() {
-        this(Log.DEBUG);
-    }
-
-    public DebugTree(int logLevel) {
-        level(logLevel);
+    @Override
+    protected ILogzConfig configer() {
+        return new LogzConfiger()
+                .configAllowLog(true)//config log can output
+                .configShowBorders(true)//config if pretty output
+                .configClassParserLevel(1)//config class paser level
+                .configMimLogLevel(Log.DEBUG)//config mim output level
+                .configGlobalPrefix("LizhiFM_Debug");//config tag prefix
     }
 
     @Override

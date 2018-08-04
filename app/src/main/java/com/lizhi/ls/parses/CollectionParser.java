@@ -2,6 +2,7 @@ package com.lizhi.ls.parses;
 
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzConvert;
+import com.lizhi.ls.config.ILogzConfig;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,7 +19,7 @@ public class CollectionParser implements IParser<Collection> {
     }
 
     @Override
-    public String parseString(Collection collection) {
+    public String parseString(ILogzConfig configer, Collection collection) {
         String simpleName = collection.getClass().getName();
         String msg = "%s size = %d" + LogzConstant.BR;
         msg = String.format(msg, simpleName, collection.size());
@@ -28,7 +29,7 @@ public class CollectionParser implements IParser<Collection> {
             while (iterator.hasNext()) {
                 String itemString = "[%d]:%s%s";
                 Object item = iterator.next();
-                msg += String.format(itemString, flag, LogzConvert.objectToString(item),
+                msg += String.format(itemString, flag, LogzConvert.objectToString(configer, item),
                         flag++ < collection.size() - 1 ? "," + LogzConstant.BR : LogzConstant.BR);
             }
         }

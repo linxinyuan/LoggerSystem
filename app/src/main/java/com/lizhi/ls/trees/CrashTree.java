@@ -2,7 +2,10 @@ package com.lizhi.ls.trees;
 
 import android.util.Log;
 
+import com.lizhi.ls.Logz;
 import com.lizhi.ls.base.Tree;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -10,12 +13,14 @@ import com.lizhi.ls.base.Tree;
  * Desc : 输出Crash的日志树节点(默认日志输出级别为Warn)
  */
 public class CrashTree extends Tree {
-    public CrashTree(){
-        this(Log.WARN);
-    }
-
-    public CrashTree(int logLevel){
-        level(logLevel);
+    @Override
+    protected ILogzConfig configer() {
+        return new LogzConfiger()
+                .configAllowLog(true)//config log can output
+                .configShowBorders(true)//config if pretty output
+                .configClassParserLevel(1)//config class paser level
+                .configMimLogLevel(Log.WARN)//config mim output level
+                .configGlobalPrefix("LizhiFM_Crash");//config tag prefix
     }
 
     @Override

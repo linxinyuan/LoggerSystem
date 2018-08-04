@@ -7,18 +7,16 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
-import com.lizhi.ls.Logz;
 import com.lizhi.ls.base.Tree;
 import com.lizhi.ls.common.LogzConstant;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,10 +24,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.ByteString;
 import okio.GzipSink;
-import okio.GzipSource;
 import okio.Okio;
 
 /**
@@ -40,10 +35,7 @@ import okio.Okio;
 public class FileSaveTree extends Tree {
     private File mLogFile;
     private Context mContext;
-    private String mDirectory;
     private ExecutorService executor;
-
-    //do not need border
 
     private static final String FILE_NAME_VERBOSE = "verbose";
     private static final String FILE_NAME_DEBUG = "debug";
@@ -56,18 +48,18 @@ public class FileSaveTree extends Tree {
     private static final String DEFAULT_PATH = Environment.getExternalStorageDirectory().getPath() + "/LizhiFm/Logz/";
 
     public FileSaveTree() {
-        this(null);
+        //executor have only on thread
+        executor = Executors.newSingleThreadExecutor();
     }
 
-    public FileSaveTree(Context context) {
-        this(context, Log.DEBUG);
-    }
-
-    public FileSaveTree(Context context, int logLevel) {
-        level(logLevel);
-        this.mContext = context;
-        this.mDirectory = DEFAULT_PATH;
-        this.executor = Executors.newSingleThreadExecutor();
+    @Override
+    protected ILogzConfig configer() {
+        return new LogzConfiger()
+                .configAllowLog(true)//config log can output
+                .configShowBorders(false)//config if pretty output
+                .configClassParserLevel(1)//config class paser level
+                .configMimLogLevel(Log.DEBUG)//config mim output level
+                .configGlobalPrefix("LizhiFM_File");//config tag prefix
     }
 
     @Override
@@ -83,7 +75,7 @@ public class FileSaveTree extends Tree {
         }
         //create file if not exist
         String dateFlag = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
-        File dir = new File(mDirectory + dateFlag);
+        File dir = new File(DEFAULT_PATH + dateFlag);
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -111,7 +103,7 @@ public class FileSaveTree extends Tree {
             default:
                 break;
         }
-        mLogFile = new File(mDirectory + dateFlag + File.separator + fileName + FILE_NAME_SUFFIX);
+        mLogFile = new File(DEFAULT_PATH + dateFlag + File.separator + fileName + FILE_NAME_SUFFIX);
         try {
             if (!mLogFile.exists()) {
                 mLogFile.createNewFile();
@@ -126,7 +118,7 @@ public class FileSaveTree extends Tree {
                         public Boolean apply(Integer integer) {
                             try {
                                 //write file with okio include zip
-                                wirteUnPrettyLogWithOkio(tag, message, gzipSink, sink);
+                                wirteLogFileWithOkio(tag, message, gzipSink, sink);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -147,7 +139,7 @@ public class FileSaveTree extends Tree {
      * @param sink
      * @throws Exception
      */
-    public void wirteUnPrettyLogWithOkio(String tag, String message,
+    public void wirteLogFileWithOkio(String tag, String message,
                                          GzipSink gzipSink, BufferedSink sink) throws Exception {
         String timeSecond = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         sink.writeUtf8(timeSecond + "/t" + tag + "/t" + message + LogzConstant.BR);

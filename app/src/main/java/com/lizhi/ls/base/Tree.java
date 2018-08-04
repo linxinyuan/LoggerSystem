@@ -7,7 +7,7 @@ import android.util.Log;
 import com.lizhi.ls.Logz;
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzConvert;
-import com.lizhi.ls.config.LogzGlobalConfig;
+import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 
@@ -38,12 +38,10 @@ import javax.xml.transform.stream.StreamSource;
  */
 public abstract class Tree implements ITree {
     private final ThreadLocal<String> localTags = new ThreadLocal<>();
-    private LogzGlobalConfig mTLogConfig;//Golbal log output level
-    protected int logLevel;//child tree log level custom
+    private ILogzConfig mTLogConfig;//Golbal log output level
 
     public Tree() {
-        mTLogConfig = LogzGlobalConfig.getInstance();
-        logLevel = mTLogConfig.getLogLevel();//Defalut-Verbose
+        mTLogConfig = (configer() == null ? Logz.getLogConfigCenter() : configer());
     }
 
     public ITree setTag(String tag) {
@@ -51,35 +49,6 @@ public abstract class Tree implements ITree {
             localTags.set(tag);
         }
         return this;
-    }
-
-    public void level(int l) {
-        if (l < logLevel) {
-            return;
-        }
-        switch (l) {
-            case Log.VERBOSE:
-                this.logLevel = Log.VERBOSE;
-                break;
-            case Log.DEBUG:
-                this.logLevel = Log.DEBUG;
-                break;
-            case Log.INFO:
-                this.logLevel = Log.INFO;
-                break;
-            case Log.WARN:
-                this.logLevel = Log.WARN;
-                break;
-            case Log.ERROR:
-                this.logLevel = Log.ERROR;
-                break;
-            case Log.ASSERT:
-                this.logLevel = Log.ASSERT;
-                break;
-            default:
-                this.logLevel = Log.VERBOSE;
-                break;
-        }
     }
 
     @Override
@@ -263,7 +232,7 @@ public abstract class Tree implements ITree {
     }
 
     private void prepareLogObject(int priority, Object o) {
-        prepareLog(priority, null, LogzConvert.objectToString(o));
+        prepareLog(priority, null, LogzConvert.objectToString(mTLogConfig, o));
     }
 
     private void prepareLog(int priority, Throwable t, String message, Object... args) {
@@ -272,7 +241,7 @@ public abstract class Tree implements ITree {
             return;
         }
         //target log level mim than minLogOutputLevel
-        if (priority < this.logLevel) {
+        if (priority < mTLogConfig.getMimLogLevel()) {
             return;
         }
         //get tag (custom/global/class_name)
@@ -443,5 +412,6 @@ public abstract class Tree implements ITree {
         log(priority, tag, message);
     }
 
+    protected abstract ILogzConfig configer();//return null if you want to use global config
     protected abstract void log(int type, String tag, String message);
 }

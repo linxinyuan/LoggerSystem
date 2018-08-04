@@ -1,6 +1,7 @@
 package com.lizhi.ls.trees;
 
 import com.lizhi.ls.base.Tree;
+import com.lizhi.ls.config.LogzConfiger;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -237,5 +238,10 @@ public class SoulsTree extends Tree {
     @Override
     protected void log(int type, String tag, String message) {
         throw new AssertionError("Missing override for log method.");
+    }
+
+    @Override
+    protected LogzConfiger configer() {
+        throw new AssertionError("Missing override for configer method.");
     }
 }

@@ -1,6 +1,7 @@
 package com.lizhi.ls.common;
 
-import com.lizhi.ls.config.LogzGlobalConfig;
+import com.lizhi.ls.config.ILogzConfig;
+import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.parses.IParser;
 import com.lizhi.ls.parses.CollectionParser;
 import com.lizhi.ls.parses.MapParser;
@@ -31,7 +32,7 @@ public class LogzConstant {
             CollectionParser.class, MapParser.class
     };
 
-    public static List<IParser> getParserList() {
-        return LogzGlobalConfig.getInstance().getParserList();
+    public static List<IParser> getParserList(ILogzConfig configer) {
+        return configer.getParserList();
     }
 }

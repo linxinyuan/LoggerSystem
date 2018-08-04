@@ -2,6 +2,7 @@ package com.lizhi.ls.parses;
 
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzConvert;
+import com.lizhi.ls.config.ILogzConfig;
 
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class MapParser implements IParser<Map> {
     }
 
     @Override
-    public String parseString(Map map) {
+    public String parseString(ILogzConfig configer, Map map) {
         String msg = map.getClass().getName() + LogzConstant.BR;
         Set keys = map.keySet();
         for (Object key : keys) {
@@ -31,7 +32,8 @@ public class MapParser implements IParser<Map> {
                     value = "\'" + value + "\'";//add '' when value is char
                 }
             }
-            msg += String.format(itemString, LogzConvert.objectToString(key), LogzConvert.objectToString(value));
+            msg += String.format(itemString, LogzConvert.objectToString(configer, key),
+                    LogzConvert.objectToString(configer, value));
         }
         return msg;
     }

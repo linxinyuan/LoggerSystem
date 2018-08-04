@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : logz日志系统全局配置中心
+ * Desc : logz日志系统配置器
  */
-public class LogzGlobalConfig implements ILogzGlobalConfig {
+public class LogzConfiger implements ILogzConfig {
     private String globalPrefix;
     private boolean isEnable = true;
     private boolean isShowBorder = false;
@@ -21,45 +21,36 @@ public class LogzGlobalConfig implements ILogzGlobalConfig {
     private List<IParser> mParserList;
     private int mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
 
-    private LogzGlobalConfig() {
+    public LogzConfiger() {
         addLogzParserClass(LogzConstant.DEFAULT_PARSE_CLASS);
     }
 
-    public static LogzGlobalConfig getInstance() {
-        return TLogConfigCenterInstance.INSTANCE;
-    }
-
-    public static class TLogConfigCenterInstance {
-        private static final LogzGlobalConfig INSTANCE = new LogzGlobalConfig();
-    }
-
-
     @Override
-    public ILogzGlobalConfig configAllowLog(boolean allowLog) {
+    public ILogzConfig configAllowLog(boolean allowLog) {
         this.isEnable = allowLog;
         return this;
     }
 
     @Override
-    public ILogzGlobalConfig configShowBorders(boolean showBorder) {
+    public ILogzConfig configShowBorders(boolean showBorder) {
         this.isShowBorder = showBorder;
         return this;
     }
 
     @Override
-    public ILogzGlobalConfig configMimLogLevel(int mimLogLevel) {
+    public ILogzConfig configMimLogLevel(int mimLogLevel) {
         this.mimLogLevel = mimLogLevel;
         return this;
     }
 
     @Override
-    public ILogzGlobalConfig configGlobalPrefix(String globalPrefix) {
+    public ILogzConfig configGlobalPrefix(String globalPrefix) {
         this.globalPrefix = globalPrefix;
         return this;
     }
 
     @Override
-    public ILogzGlobalConfig configClassParserLevel(int parserLevel) {
+    public ILogzConfig configClassParserLevel(int parserLevel) {
         if (parserLevel < 0 || parserLevel > 2)
             mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
         else
@@ -68,7 +59,7 @@ public class LogzGlobalConfig implements ILogzGlobalConfig {
     }
 
     @Override
-    public ILogzGlobalConfig addLogzParserClass(Class<? extends IParser>... parsers){
+    public ILogzConfig addLogzParserClass(Class<? extends IParser>... parsers){
         mParserList = new ArrayList<IParser>();//list init
         for (Class<? extends IParser> cla : parsers) {
             try {
@@ -85,7 +76,7 @@ public class LogzGlobalConfig implements ILogzGlobalConfig {
         return this.isEnable;
     }
 
-    public int getLogLevel() {
+    public int getMimLogLevel() {
         return this.mimLogLevel;
     }
 

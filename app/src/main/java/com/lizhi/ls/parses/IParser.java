@@ -1,6 +1,7 @@
 package com.lizhi.ls.parses;
 
 import com.lizhi.ls.common.LogzConstant;
+import com.lizhi.ls.config.ILogzConfig;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/02
@@ -10,5 +11,5 @@ import com.lizhi.ls.common.LogzConstant;
 public interface IParser<T> {
     Class<T> parseClassType();
 
-    String parseString(T t);
+    String parseString(ILogzConfig configer, T t);
 }
