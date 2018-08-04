@@ -7,9 +7,17 @@ import com.lizhi.ls.base.Tree;
 /**
  * Author : Create by Linxinyuan on 2018/08/02
  * Email : linxinyuan@lizhi.fm
- * Desc : 输出到Logcat的日志树节点
+ * Desc : 输出到Logcat的日志树节点(默认日志输出级别为Debug)
  */
 public class DebugTree extends Tree {
+    public DebugTree() {
+        this(Log.DEBUG);
+    }
+
+    public DebugTree(int logLevel) {
+        level(logLevel);
+    }
+
     @Override
     protected void log(int type, String tag, String message) {
         switch (type) {

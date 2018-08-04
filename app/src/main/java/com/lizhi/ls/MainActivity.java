@@ -24,24 +24,14 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                printMap();
             }
         });
-    }
 
-    private void printList() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            list.add("test" + i);
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++){
+            Logz.d(new NullPointerException("test print file"));
         }
-        Logz.d(list);
-    }
-
-    private void printMap() {
-        Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < 5; i++) {
-            map.put("xyy" + i, "test" + i);
-        }
-        Logz.d(map);
+        long end = System.currentTimeMillis();
+        Log.e("time", String.valueOf(end - start));
     }
 }

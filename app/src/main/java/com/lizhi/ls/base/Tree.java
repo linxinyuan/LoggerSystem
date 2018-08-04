@@ -38,10 +38,12 @@ import javax.xml.transform.stream.StreamSource;
  */
 public abstract class Tree implements ITree {
     private final ThreadLocal<String> localTags = new ThreadLocal<>();
-    private LogzConfigCenter mTLogConfig;
+    private LogzConfigCenter mTLogConfig;//Golbal log output level
+    protected int logLevel;//child tree log level custom
 
     public Tree() {
         mTLogConfig = LogzConfigCenter.getInstance();
+        logLevel = mTLogConfig.getLogLevel();//Defalut-Verbose
     }
 
     public ITree setTag(String tag) {
@@ -49,6 +51,35 @@ public abstract class Tree implements ITree {
             localTags.set(tag);
         }
         return this;
+    }
+
+    public void level(int l) {
+        if (l < logLevel) {
+            return;
+        }
+        switch (l) {
+            case Log.VERBOSE:
+                this.logLevel = Log.VERBOSE;
+                break;
+            case Log.DEBUG:
+                this.logLevel = Log.DEBUG;
+                break;
+            case Log.INFO:
+                this.logLevel = Log.INFO;
+                break;
+            case Log.WARN:
+                this.logLevel = Log.WARN;
+                break;
+            case Log.ERROR:
+                this.logLevel = Log.ERROR;
+                break;
+            case Log.ASSERT:
+                this.logLevel = Log.ASSERT;
+                break;
+            default:
+                this.logLevel = Log.VERBOSE;
+                break;
+        }
     }
 
     @Override
@@ -231,7 +262,7 @@ public abstract class Tree implements ITree {
         }
     }
 
-    private void prepareLogObject(int priority, Object o){
+    private void prepareLogObject(int priority, Object o) {
         prepareLog(priority, null, LogzConvert.objectToString(o));
     }
 
@@ -241,7 +272,7 @@ public abstract class Tree implements ITree {
             return;
         }
         //target log level mim than minLogOutputLevel
-        if (priority < mTLogConfig.getLogLevel()) {
+        if (priority < this.logLevel) {
             return;
         }
         //get tag (custom/global/class_name)
@@ -364,7 +395,7 @@ public abstract class Tree implements ITree {
         if (stackOffset_tln != -1) {
             return trace[stackOffset_tln];
         }
-        if (stackOffset_soul != -1){
+        if (stackOffset_soul != -1) {
             return trace[stackOffset_soul];
         }
         return null;
