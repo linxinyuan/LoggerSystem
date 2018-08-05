@@ -28,21 +28,23 @@ public interface ILogzConfig {
     //添加自定义解析器
     ILogzConfig addLogzParserClass(Class<? extends IParser>... classes);
 
-    //获取是否输出日志标志位
-    boolean isEnable();
-
     //获取日志最小输出级别
     int getMimLogLevel();
 
-    //获取特定标签头设置
-    String getGlobalPrefix();
+    //获取日志解析类的上下最大层级
+    int getParserLevel();
 
     //获取是否输出格式化日志标志位
     boolean isShowBorder();
 
+    //获取是否输出日志标志位
+    boolean isEnable();
+
+    //获取特定标签头设置
+    String getGlobalPrefix();
+
     //获取自定义转换器列表
     List<IParser> getParserList();
 
-    //获取日志解析类的上下最大层级
-    int getParserLevel();
+
 }
