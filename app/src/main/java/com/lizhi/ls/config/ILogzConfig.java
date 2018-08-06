@@ -20,7 +20,7 @@ public interface ILogzConfig {
     ILogzConfig configMimLogLevel(int mimLogLevel);
 
     //设置日志tag前缀
-    ILogzConfig configGlobalPrefix(String globalPrefix);
+    ILogzConfig configTagPrefix(String tagPrefix);
 
     //设置解析类(父类与类成员)层级(考虑到反射效率,取值范围限定是0-2,默认为1)
     ILogzConfig configClassParserLevel(int parserLevel);
@@ -41,7 +41,7 @@ public interface ILogzConfig {
     boolean isEnable();
 
     //获取特定标签头设置
-    String getGlobalPrefix();
+    String getTagPrefix();
 
     //获取自定义转换器列表
     List<IParser> getParserList();

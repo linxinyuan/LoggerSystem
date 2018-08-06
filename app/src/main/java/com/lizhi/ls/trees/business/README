@@ -1,0 +1,6 @@
+//根据业务线分类生成LogTree
+1.继承于ProductTree
+2.重写configer方法重新定义业务日志树的配置器
+(1)super则使用DebugTree的日志输出配置器
+(2)返回null使用全局默认配置器
+3.重写flatLog方法可以自定义log输出特性

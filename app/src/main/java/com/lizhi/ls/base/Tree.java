@@ -313,8 +313,8 @@ public abstract class Tree implements ITree {
             return tempTag;
         }
         // global tag
-        if (!TextUtils.isEmpty(mTLogConfig.getGlobalPrefix())) {
-            return mTLogConfig.getGlobalPrefix();
+        if (!TextUtils.isEmpty(mTLogConfig.getTagPrefix())) {
+            return mTLogConfig.getTagPrefix();
         }
         // class tag
         return createStackElementTag(getCurrentStackTrace());

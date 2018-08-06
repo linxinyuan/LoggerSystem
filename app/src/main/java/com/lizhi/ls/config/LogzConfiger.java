@@ -14,12 +14,12 @@ import java.util.List;
  * Desc : logz日志系统配置器
  */
 public class LogzConfiger implements ILogzConfig {
-    private String globalPrefix;
     private boolean isEnable = true;
     private boolean isShowBorder = false;
     private int mimLogLevel = Log.VERBOSE;
     private List<IParser> mParserList;
     private int mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
+    private String tagPrefix = LogzConstant.DEFAULT_TAG_PREFIX;
 
     public LogzConfiger() {
         addLogzParserClass(LogzConstant.DEFAULT_PARSE_CLASS);
@@ -44,8 +44,8 @@ public class LogzConfiger implements ILogzConfig {
     }
 
     @Override
-    public ILogzConfig configGlobalPrefix(String globalPrefix) {
-        this.globalPrefix = globalPrefix;
+    public ILogzConfig configTagPrefix(String tagPrefix) {
+        this.tagPrefix = tagPrefix;
         return this;
     }
 
@@ -80,8 +80,8 @@ public class LogzConfiger implements ILogzConfig {
         return this.mimLogLevel;
     }
 
-    public String getGlobalPrefix() {
-        return this.globalPrefix;
+    public String getTagPrefix() {
+        return this.tagPrefix;
     }
 
     public boolean isShowBorder() {
