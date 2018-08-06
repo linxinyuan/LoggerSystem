@@ -25,7 +25,7 @@ public class MyApplication extends Application {
 
             //TODO If need application context?
             Logz.plant(new DebugTree());
-            Logz.plant(new FileSaveTree());
+            Logz.plant(new FileSaveTree(this));
         }
     }
 }

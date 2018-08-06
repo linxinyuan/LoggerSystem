@@ -1,7 +1,6 @@
 package com.lizhi.ls.common;
 
 import com.lizhi.ls.config.ILogzConfig;
-import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.parses.ArrayParser;
 import com.lizhi.ls.parses.IParser;
 

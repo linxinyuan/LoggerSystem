@@ -242,6 +242,6 @@ public class SoulsTree extends Tree {
 
     @Override
     protected LogzConfiger configer() {
-        throw new AssertionError("Missing override for configer method.");
+        return null;//default configer
     }
 }

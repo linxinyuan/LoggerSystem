@@ -36,6 +36,7 @@ public class FileSaveTree extends Tree {
     private File mLogFile;
     private Context mContext;
     private ExecutorService executor;
+    //private boolean isGzipLog = true;
 
     private static final String FILE_NAME_VERBOSE = "verbose";
     private static final String FILE_NAME_DEBUG = "debug";
@@ -47,7 +48,9 @@ public class FileSaveTree extends Tree {
 
     private static final String DEFAULT_PATH = Environment.getExternalStorageDirectory().getPath() + "/LizhiFm/Logz/";
 
-    public FileSaveTree() {
+    public FileSaveTree(Context context) {
+        //get other print msg needed
+        mContext = context;
         //executor have only on thread
         executor = Executors.newSingleThreadExecutor();
     }
@@ -140,7 +143,7 @@ public class FileSaveTree extends Tree {
      * @throws Exception
      */
     public void wirteLogFileWithOkio(String tag, String message,
-                                         GzipSink gzipSink, BufferedSink sink) throws Exception {
+                                     GzipSink gzipSink, BufferedSink sink) throws Exception {
         String timeSecond = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         sink.writeUtf8(timeSecond + "/t" + tag + "/t" + message + LogzConstant.BR);
         //close file outputStream resource
@@ -183,7 +186,7 @@ public class FileSaveTree extends Tree {
             //cpu type
             sink.writeUtf8("CPU ABI:");
             sink.writeUtf8(Build.CPU_ABI);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
