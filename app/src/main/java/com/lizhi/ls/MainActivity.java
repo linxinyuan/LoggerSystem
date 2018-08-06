@@ -12,17 +12,18 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btn;
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
+        button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logz.tag("dd").d("linxinyuan");
+                Logz.w("Logz output");
             }
         });
     }

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.lizhi.ls.Logz;
+import com.lizhi.ls.MyApplication;
 import com.lizhi.ls.base.Tree;
 import com.lizhi.ls.channel.FileChannelSink;
 import com.lizhi.ls.common.LogzConstant;
@@ -43,13 +44,13 @@ public class FileSaveTree extends Tree {
     private ExecutorService executor;
     //private boolean isGzipLog = true;
 
-    private static final String FILE_NAME_VERBOSE = "verbose";
-    private static final String FILE_NAME_DEBUG = "debug";
-    private static final String FILE_NAME_INFO = "info";
-    private static final String FILE_NAME_WARN = "warn";
-    private static final String FILE_NAME_ERROR = "error";
-    private static final String FILE_NAME_ASSERT = "assert";
-    private static final String FILE_NAME_SUFFIX = ".log";
+    //private static final String FILE_NAME_VERBOSE = "verbose";
+    //private static final String FILE_NAME_DEBUG = "debug";
+    //private static final String FILE_NAME_INFO = "info";
+    //private static final String FILE_NAME_WARN = "warn";
+    //private static final String FILE_NAME_ERROR = "error";
+    //private static final String FILE_NAME_ASSERT = "assert";
+    private static final String FILE_NAME_SUFFIX = "_log.txt";
 
     //private static final Set<StandardOpenOption> read = EnumSet.of(READ);
     //private static final Set<StandardOpenOption> write = EnumSet.of(WRITE);
@@ -73,6 +74,7 @@ public class FileSaveTree extends Tree {
     @Override
     protected void log(int type, String tag, String message) {
         saveMessageToSDCard(type, tag, message);
+        judgeOutputLogLevel(type);
     }
 
     private void saveMessageToSDCard(int type, final String tag, final String message) {
@@ -87,37 +89,11 @@ public class FileSaveTree extends Tree {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        //sort with log level
-        String fileName = FILE_NAME_VERBOSE;
-        switch (type) {
-            case Log.VERBOSE:
-                logLevel = "V/";
-                fileName = FILE_NAME_VERBOSE;
-                break;
-            case Log.INFO:
-                logLevel = "I/";
-                fileName = FILE_NAME_INFO;
-                break;
-            case Log.DEBUG:
-                logLevel = "D/";
-                fileName = FILE_NAME_DEBUG;
-                break;
-            case Log.WARN:
-                logLevel = "W/";
-                fileName = FILE_NAME_WARN;
-                break;
-            case Log.ERROR:
-                logLevel = "E/";
-                fileName = FILE_NAME_ERROR;
-                break;
-            case Log.ASSERT:
-                logLevel = "A/";
-                fileName = FILE_NAME_ASSERT;
-                break;
-            default:
-                break;
-        }
-        mLogFile = new File(DEFAULT_PATH + dateFlag + File.separator + fileName + FILE_NAME_SUFFIX);
+        // cut time
+        long now = System.currentTimeMillis();
+        Date date = new Date(now - now % LogzConstant.LOG_FILE_INTERVAL);
+        SimpleDateFormat formater = new SimpleDateFormat("HHmmss");
+        mLogFile = new File(DEFAULT_PATH + dateFlag + File.separator + formater.format(date) + "_" + getCurrentProcessName() + FILE_NAME_SUFFIX);
         try {
             if (!mLogFile.exists()) {
                 mLogFile.createNewFile();
@@ -133,7 +109,6 @@ public class FileSaveTree extends Tree {
                         @Override
                         public Boolean apply(Integer integer) {
                             try {
-                                long start = System.currentTimeMillis();
                                 /* write file with okio without zip nio*/
                                 //writeLogFileWithOkioChannel(tag, message, sink);
 
@@ -142,8 +117,10 @@ public class FileSaveTree extends Tree {
 
                                 /* write file with okio include zip */
                                 //wirteLogFileWithOkioZip(tag, message, gzipSink, sinkZip);
-                                long end = System.currentTimeMillis();
-                                Log.e("time", String.valueOf(end - start));
+
+                                //long start = System.currentTimeMillis();
+                                //long end = System.currentTimeMillis();
+                                //Log.e("time", String.valueOf(end - start));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -259,5 +236,31 @@ public class FileSaveTree extends Tree {
             }
         }
         return processName;
+    }
+
+    private void judgeOutputLogLevel(int type) {
+        //sort with log level
+        switch (type) {
+            case Log.VERBOSE:
+                logLevel = "V/";
+                break;
+            case Log.INFO:
+                logLevel = "I/";
+                break;
+            case Log.DEBUG:
+                logLevel = "D/";
+                break;
+            case Log.WARN:
+                logLevel = "W/";
+                break;
+            case Log.ERROR:
+                logLevel = "E/";
+                break;
+            case Log.ASSERT:
+                logLevel = "A/";
+                break;
+            default:
+                break;
+        }
     }
 }

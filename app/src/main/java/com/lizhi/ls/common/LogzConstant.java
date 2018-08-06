@@ -21,13 +21,12 @@ public class LogzConstant {
     public static final int DIVIDER_CENTER = 4;
     public static final int DIVIDER_NORMAL = 3;
 
-    public static final int KB = 1024;
-    public static final int LINE_MAX = 3 * KB;// 最大日志长度
+    public static final int LINE_MAX = 3 * 1024;// 最大日志长度
     public static final int CALL_STACK_INDEX = 5;// 堆栈寻址下标
     public static final int JSON_PRINT_INDENT = 4;// Json输出缩进
     public static final int MAX_CHILD_LEVEL = 1;//Object最大解析层级(父子)
-    public static final int MAX_File_SIZE = (int)(2 * Math.pow(KB, 2));//最大单个文件大小
-    public static final String DEFAULT_TAG_PREFIX = "LizhiFM";
+
+    public static final long LOG_FILE_INTERVAL = 3600000L;//时间切片
 
     public static final String TIP_OBJECT_NULL = "Object[object is null]";//空类
     public static final String BR = System.getProperty("line.separator");// 换行符
