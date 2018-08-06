@@ -26,7 +26,7 @@ public final class Logz {
     }
 
     // default config change
-    public static ILogzConfig getLogConfigCenter() {
+    public static ILogzConfig getLogGlobalConfigCenter() {
         return LOG_DEFALUT_CONFIG;
     }
 

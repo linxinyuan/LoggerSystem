@@ -41,7 +41,7 @@ public abstract class Tree implements ITree {
     private ILogzConfig mTLogConfig;//Golbal log output level
 
     public Tree() {
-        mTLogConfig = (configer() == null ? Logz.getLogConfigCenter() : configer());
+        mTLogConfig = (configer() == null ? Logz.getLogGlobalConfigCenter() : configer());
     }
 
     public ITree setTag(String tag) {

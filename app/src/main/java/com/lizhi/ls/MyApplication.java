@@ -1,6 +1,7 @@
 package com.lizhi.ls;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.lizhi.ls.trees.DebugTree;
 import com.lizhi.ls.trees.FileSaveTree;
@@ -16,12 +17,12 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
-//            Logz.getLogConfigCenter()
-//                    .configAllowLog(true)//config log can output
-//                    .configShowBorders(true)//config if pretty output
-//                    .configClassParserLevel(1)//config class paser level
-//                    .configMimLogLevel(Log.VERBOSE)//config mim output level
-//                    .configTagPrefix("LizhiFM");//config global tag prefix
+            Logz.getLogGlobalConfigCenter()
+                    .configAllowLog(true)//config log can output
+                    .configShowBorders(true)//config if pretty output
+                    .configClassParserLevel(1)//config class paser level
+                    .configMimLogLevel(Log.VERBOSE)//config mim output level
+                    .configTagPrefix("LizhiFM");//config global tag prefix
 
             Logz.plant(new LiveTree());
             Logz.plant(new DebugTree());
