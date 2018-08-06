@@ -1,4 +1,4 @@
-package com.lizhi.ls.trees.business;
+package com.lizhi.ls.trees.business.base;
 
 import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.trees.DebugTree;
