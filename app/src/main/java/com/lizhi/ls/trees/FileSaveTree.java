@@ -1,13 +1,16 @@
 package com.lizhi.ls.trees;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Trace;
 import android.util.Log;
 
 import com.lizhi.ls.Logz;
+import com.lizhi.ls.MyApplication;
 import com.lizhi.ls.base.Tree;
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.common.LogzTreeTags;
@@ -39,6 +42,7 @@ import okio.Okio;
  */
 public class FileSaveTree extends Tree {
     private File mLogFile;
+    private String logLevel;
     private Context mContext;
     private ExecutorService executor;
     //private boolean isGzipLog = true;
@@ -64,7 +68,7 @@ public class FileSaveTree extends Tree {
     protected ILogzConfig configer() {
         return new LogzConfiger()
                 .configShowBorders(false)//config if pretty output
-                .configMimLogLevel(Log.DEBUG)//config mim output level
+                .configMimLogLevel(Log.WARN)//config mim output level
                 .configTagPrefix(LogzTreeTags.TAG_FILE);//config tag prefix
     }
 
@@ -90,21 +94,27 @@ public class FileSaveTree extends Tree {
         switch (type) {
             case Log.VERBOSE:
                 fileName = FILE_NAME_VERBOSE;
+                logLevel = "V/";
                 break;
             case Log.INFO:
                 fileName = FILE_NAME_INFO;
+                logLevel = "I/";
                 break;
             case Log.DEBUG:
                 fileName = FILE_NAME_DEBUG;
+                logLevel = "D/";
                 break;
             case Log.WARN:
                 fileName = FILE_NAME_WARN;
+                logLevel = "W/";
                 break;
             case Log.ERROR:
                 fileName = FILE_NAME_ERROR;
+                logLevel = "E/";
                 break;
             case Log.ASSERT:
                 fileName = FILE_NAME_ASSERT;
+                logLevel = "A/";
                 break;
             default:
                 break;
@@ -114,11 +124,12 @@ public class FileSaveTree extends Tree {
             if (!mLogFile.exists()) {
                 mLogFile.createNewFile();
             }
-            final GzipSink gzipSink = new GzipSink(Okio.buffer(Okio.sink(mLogFile)));
-            final BufferedSink sink = Okio.buffer(gzipSink);
-            //final FileWriter fileWriter = new FileWriter(mLogFile);
-            //final PrintWriter printWriter = new PrintWriter(fileWriter);
-            //final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            final BufferedSink sink = Okio.buffer(Okio.appendingSink(mLogFile));//append
+            // final GzipSink gzipSink = new GzipSink(Okio.buffer(Okio.appendingSink(mLogFile)));//append
+            // final BufferedSink sinkZip = Okio.buffer(gzipSink);
+            // final FileWriter fileWriter = new FileWriter(mLogFile, true);
+            // final PrintWriter printWriter = new PrintWriter(fileWriter);
+            // final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             // wirteUserPhoneMessage(sink);//write phone message
             Observable.just(1).
                     observeOn(Schedulers.from(executor))
@@ -126,20 +137,22 @@ public class FileSaveTree extends Tree {
                         @Override
                         public Boolean apply(Integer integer) {
                             try {
-                                //write file with okio include zip
-                                wirteLogFileWithOkio(tag, message, gzipSink, sink);
-                                // test time
-//                                long start = System.currentTimeMillis();
-//                                for (int i=0; i<200000; i++) {
-//                                    /* write file with okio include zip */
-//                                    //wirteLogFileWithOkio(tag, message, gzipSink, sink);
-//                                    /* write file with printwriter without zip */
-//                                    //writeLogFileWithPrintWriter(tag, message, printWriter);
-//                                    /* write file with bufferwriter without zip */
-//                                    //writeLogFileWithBufferWriter(tag, message, bufferedWriter);
-//                                }
-//                                long end = System.currentTimeMillis();
-//                                Log.e("time", String.valueOf(end - start));
+                                long start = System.currentTimeMillis();
+                                /* write file with okio without zip */
+                                for (int i=0; i<200000; i++)
+                                wirteLogFileWithOkio(tag, message, sink);
+
+                                /* write file with okio include zip */
+                                //wirteLogFileWithOkioZip(tag, message, gzipSink, sinkZip);
+
+                                /* write file with printwriter without zip */
+                                //writeLogFileWithPrintWriter(tag, message, printWriter);
+
+                                /* write file with bufferwriter without zip */
+                                //writeLogFileWithBufferWriter(tag, message, bufferedWriter);
+                                long end = System.currentTimeMillis();
+                                Log.e("time", String.valueOf(end - start));
+                                sink.close();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -156,14 +169,29 @@ public class FileSaveTree extends Tree {
      *
      * @param tag
      * @param message
+     * @param sink
+     * @throws Exception
+     */
+    private void wirteLogFileWithOkio(String tag, String message, BufferedSink sink) throws Exception {
+        String timeSecond = new SimpleDateFormat("MM-dd/HH:mm:ss").format(new Date(System.currentTimeMillis()));
+        sink.writeUtf8(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
+        //close file outputStream resource
+        sink.close();
+    }
+
+    /**
+     * Use Okio write one line log to file
+     *
+     * @param tag
+     * @param message
      * @param gzipSink
      * @param sink
      * @throws Exception
      */
-    public void wirteLogFileWithOkio(String tag, String message,
-                                     GzipSink gzipSink, BufferedSink sink) throws Exception {
-        String timeSecond = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
-        sink.writeUtf8(timeSecond + "/t" + tag + "/t" + message + LogzConstant.BR);
+    private void wirteLogFileWithOkioZip(String tag, String message,
+                                         GzipSink gzipSink, BufferedSink sink) throws Exception {
+        String timeSecond = new SimpleDateFormat("MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
+        sink.writeUtf8(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
         //close file outputStream resource
         sink.close();
         gzipSink.close();
@@ -177,10 +205,11 @@ public class FileSaveTree extends Tree {
      * @param printWriter
      * @throws Exception
      */
-    public void writeLogFileWithPrintWriter(String tag, String message,
-                                            PrintWriter printWriter) throws Exception {
-        String timeSecond = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
-        printWriter.print(timeSecond + "/t" + tag + "/t" + message + LogzConstant.BR);
+    private void writeLogFileWithPrintWriter(String tag, String message,
+                                             PrintWriter printWriter) throws Exception {
+        String timeSecond = new SimpleDateFormat("MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
+        printWriter.print(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
+        //close file outputStream resource
         printWriter.flush();
         printWriter.close();
     }
@@ -195,8 +224,9 @@ public class FileSaveTree extends Tree {
      */
     private void writeLogFileWithBufferWriter(String tag, String message,
                                               BufferedWriter bufferedWriter) throws Exception {
-        String timeSecond = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
-        bufferedWriter.write(timeSecond + "/t" + tag + "/t" + message + LogzConstant.BR);
+        String timeSecond = new SimpleDateFormat("MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
+        bufferedWriter.write(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
+        //close file outputStream resource
         bufferedWriter.flush();
         bufferedWriter.close();
     }
@@ -207,7 +237,7 @@ public class FileSaveTree extends Tree {
      * @param sink
      * @throws Exception
      */
-    public void wirteUserPhoneMessage(BufferedSink sink) {
+    private void wirteUserPhoneMessage(BufferedSink sink) {
         if (null == mContext)
             return;
         try {
@@ -239,5 +269,22 @@ public class FileSaveTree extends Tree {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Get current ProcessName
+     *
+     * @return
+     */
+    private String getCurrentProcessName() {
+        int pid = android.os.Process.myPid();
+        String processName = "";
+        ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo process : manager.getRunningAppProcesses()) {
+            if (process.pid == pid) {
+                processName = process.processName;
+            }
+        }
+        return processName;
     }
 }
