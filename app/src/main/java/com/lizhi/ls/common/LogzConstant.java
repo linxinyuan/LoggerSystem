@@ -22,6 +22,7 @@ public class LogzConstant {
     public static final int DIVIDER_NORMAL = 3;
 
     public static final int LINE_MAX = 3 * 1024;// 最大日志长度
+    public static final int FILE_MAX = 10 * 1024;// 最大文件长度
     public static final int CALL_STACK_INDEX = 5;// 堆栈寻址下标
     public static final int JSON_PRINT_INDENT = 4;// Json输出缩进
     public static final int MAX_CHILD_LEVEL = 1;//Object最大解析层级(父子)

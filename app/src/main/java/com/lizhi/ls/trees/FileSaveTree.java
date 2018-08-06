@@ -39,6 +39,8 @@ public class FileSaveTree extends Tree {
     private File mLogFile;
     private String logLevel;
     private Context mContext;
+    private long currentTarget;
+    private int iterator = 0;
     private ExecutorService executor;
     //private boolean isGzipLog = true;
 
@@ -65,8 +67,8 @@ public class FileSaveTree extends Tree {
     @Override
     protected ILogzConfig configer() {
         return new LogzConfiger()
-                .configShowBorders(false)//config if pretty output
-                .configMimLogLevel(Log.WARN);//config mim output level
+                .configShowBorders(false)//配置输出格式化为否
+                .configMimLogLevel(Log.WARN);//配置输出到文件的最小级别Warn
     }
 
     @Override
@@ -76,25 +78,30 @@ public class FileSaveTree extends Tree {
     }
 
     private void saveMessageToSDCard(int type, final String tag, final String message) {
-        // have no sd card in your phone
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Logz.e("sdcard unmounted, skip dump exception");
             return;
         }
-        //create file if not exist(Date 2018-08-06)
+        // 文件是否新建,时间切片
+        long now = System.currentTimeMillis();
+        currentTarget = now - now % LogzConstant.LOG_FILE_INTERVAL;//时间切片范畴
+        String targetFlag = new SimpleDateFormat("HH-mm-ss").format(new Date(currentTarget));
         String dateFlag = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
-        File dir = new File(DEFAULT_PATH + dateFlag);
+        File dir = new File(DEFAULT_PATH + dateFlag + File.separator + targetFlag);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        // cut time
-        long now = System.currentTimeMillis();
-        Date date = new Date(now - now % LogzConstant.LOG_FILE_INTERVAL);
-        SimpleDateFormat formater = new SimpleDateFormat("HHmmss");
-        mLogFile = new File(DEFAULT_PATH + dateFlag + File.separator + formater.format(date) + "_" + getCurrentProcessName() + FILE_NAME_SUFFIX);
+        // 是否新建输出文件
+        mLogFile = new File(dir.getAbsolutePath() + File.separator + getCurrentProcessName() + "_" + iterator + FILE_NAME_SUFFIX);
         try {
             if (!mLogFile.exists()) {
                 mLogFile.createNewFile();
+            }
+            if (mLogFile.exists()){
+                if (mLogFile.length() > LogzConstant.FILE_MAX){
+                    iterator ++;
+                    saveMessageToSDCard(type, tag, message);
+                }
             }
             // final FileChannelSink sink = new FileChannelSink(FileChannel.open(mLogFile.toPath(), append), Timeout.NONE);//append
             final BufferedSink sink = Okio.buffer(Okio.appendingSink(mLogFile));//append
@@ -173,7 +180,8 @@ public class FileSaveTree extends Tree {
     private void wirteLogFileWithOkioZip(String tag, String message,
                                          GzipSink gzipSink, BufferedSink sink) throws Exception {
         String timeSecond = new SimpleDateFormat("MM-dd-HH-mm-ss").format(new Date(System.currentTimeMillis()));
-        sink.writeUtf8(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
+        Buffer buffer = new Buffer().writeUtf8(timeSecond + "\t" + getCurrentProcessName() + "\t" + logLevel + tag + ":" + message + LogzConstant.BR);
+        sink.write(buffer, buffer.size());
         //close file outputStream resource
         sink.close();
         gzipSink.close();
@@ -236,6 +244,11 @@ public class FileSaveTree extends Tree {
         return processName;
     }
 
+    /**
+     * judge current log level
+     *
+     * @param type
+     */
     private void judgeOutputLogLevel(int type) {
         //sort with log level
         switch (type) {
