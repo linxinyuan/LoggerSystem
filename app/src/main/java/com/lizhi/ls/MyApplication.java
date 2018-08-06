@@ -26,9 +26,11 @@ public class MyApplication extends Application {
                     .configClassParserLevel(1)//config class paser level
                     .configMimLogLevel(Log.VERBOSE)//config mim output level
                     .configTagPrefix("LizhiFM");//config global tag prefix
-
-            Logz.plant(new DebugTree(), new FileSaveTree(this));
-            Logz.plant(new LiveTree(), new VoiceTree(), new RecordTree());
+            Logz.plant(new DebugTree());
+            Logz.plant(new FileSaveTree(this));
+            Logz.plantBTree(new LiveTree());
+            Logz.plantBTree(new VoiceTree());
+            Logz.plantBTree(new RecordTree());
         }
     }
 }

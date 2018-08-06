@@ -67,8 +67,7 @@ public class FileSaveTree extends Tree {
     protected ILogzConfig configer() {
         return new LogzConfiger()
                 .configShowBorders(false)//config if pretty output
-                .configMimLogLevel(Log.WARN)//config mim output level
-                .configTagPrefix(LogzTreeTags.TAG_FILE);//config tag prefix
+                .configMimLogLevel(Log.WARN);//config mim output level
     }
 
     @Override

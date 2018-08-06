@@ -18,8 +18,7 @@ public class CrashTree extends Tree {
     protected ILogzConfig configer() {
         return new LogzConfiger()
                 .configShowBorders(true)//config if pretty output
-                .configMimLogLevel(Log.WARN)//config mim output level
-                .configTagPrefix(LogzTreeTags.TAG_CRASH);//config tag prefix
+                .configMimLogLevel(Log.ERROR);//config mim output level
     }
 
     @Override

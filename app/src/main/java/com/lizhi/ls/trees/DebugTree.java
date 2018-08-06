@@ -17,8 +17,7 @@ public class DebugTree extends Tree {
     protected ILogzConfig configer() {
         return new LogzConfiger()
                 .configShowBorders(true)//config if pretty output
-                .configMimLogLevel(Log.DEBUG)//config mim output level
-                .configTagPrefix(LogzTreeTags.TAG_DEBUG);//config tag prefix
+                .configMimLogLevel(Log.DEBUG);//config mim output level
     }
 
     @Override

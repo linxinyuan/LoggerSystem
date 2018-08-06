@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logz.live.d("linxinyuan");
+                Logz.tag("dd").d("linxinyuan");
             }
         });
     }

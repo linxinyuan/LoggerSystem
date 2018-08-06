@@ -14,13 +14,9 @@ import com.lizhi.ls.trees.DebugTree;
  * (2)返回null使用全局默认配置器
  * 3.重写flatLog方法可以自定义log输出特性
  * TODO 4.记得在Logz中添加静态引用变量
- * TODO 5.业务树打印不会生成到文件中(仅用于开发调试)
+ * TODO 5.业务树打印代码相互隔离(仅用于开发调试)
  */
 public abstract class ProductTree extends DebugTree{
-    public ProductTree(){
-        Logz.registerBTree(this);
-    }
-
     @Override
     protected ILogzConfig configer() {
         return super.configer();
