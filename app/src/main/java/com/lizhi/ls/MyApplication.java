@@ -18,6 +18,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         if (BuildConfig.DEBUG) {
             Logz.getLogGlobalConfigCenter()
                     .configAllowLog(true)//config log can output
@@ -25,13 +26,9 @@ public class MyApplication extends Application {
                     .configClassParserLevel(1)//config class paser level
                     .configMimLogLevel(Log.VERBOSE)//config mim output level
                     .configTagPrefix("LizhiFM");//config global tag prefix
-            Logz.plant(new DebugTree());
-            Logz.plant(new FileSaveTree(this));
-            //Bussiness tree
-            Logz.plant(new LiveTree());
-            Logz.plant(new VoiceTree());
-            Logz.plant(new RecordTree());
 
+            Logz.plant(new DebugTree(), new FileSaveTree(this));
+            Logz.plant(new LiveTree(), new VoiceTree(), new RecordTree());
         }
     }
 }
