@@ -28,7 +28,7 @@ public class MyApplication extends Application {
                     .configTagPrefix("LizhiFM");//config global tag prefix
 
             Logz.plant(new DebugTree(), new FileSaveTree(this));
-            Logz.plant(new LiveTree(), new VoiceTree(), new RecordTree());
+            //Logz.plant(new LiveTree(), new VoiceTree(), new RecordTree());//module
         }
     }
 }

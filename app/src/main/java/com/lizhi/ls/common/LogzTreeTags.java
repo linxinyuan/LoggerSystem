@@ -1,6 +1,5 @@
 package com.lizhi.ls.common;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
@@ -11,8 +10,8 @@ import static com.lizhi.ls.common.LogzTreeTags.TAG_DEBUG;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_FILE;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_GLOBAL;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_LIVE;
-import static com.lizhi.ls.common.LogzTreeTags.TAG_VOICE;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_RECORD;
+import static com.lizhi.ls.common.LogzTreeTags.TAG_VOICE;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/06

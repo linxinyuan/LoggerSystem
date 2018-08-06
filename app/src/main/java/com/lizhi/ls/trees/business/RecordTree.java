@@ -1,5 +1,7 @@
 package com.lizhi.ls.trees.business;
 
+import android.util.Log;
+
 import com.lizhi.ls.common.LogzTreeTags;
 import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.config.LogzConfiger;
@@ -14,6 +16,7 @@ public class RecordTree extends ProductTree {
     @Override
     protected ILogzConfig configer() {
         return new LogzConfiger()
+                .configMimLogLevel(Log.DEBUG)
                 .configTagPrefix(LogzTreeTags.TAG_RECORD);
     }
 
