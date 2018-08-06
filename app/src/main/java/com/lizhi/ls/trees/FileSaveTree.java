@@ -9,11 +9,9 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.lizhi.ls.Logz;
-import com.lizhi.ls.MyApplication;
 import com.lizhi.ls.base.Tree;
 import com.lizhi.ls.channel.FileChannelSink;
 import com.lizhi.ls.common.LogzConstant;
-import com.lizhi.ls.common.LogzTreeTags;
 import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.config.LogzConfiger;
 
