@@ -5,6 +5,8 @@ import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 import com.lizhi.ls.base.Tree;
+import com.lizhi.ls.trees.business.LiveTree;
+import com.lizhi.ls.trees.business.VoiceTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +19,27 @@ import static java.util.Collections.unmodifiableList;
  * Desc : 日志输出工具类
  */
 public final class Logz {
+
     private static final Tree TREE_OF_SOULS = new SoulsTree();
     private static final List<Tree> FOREST = new ArrayList<>();
     private static final LogzConfiger LOG_DEFALUT_CONFIG = new LogzConfiger();
+
+    public static Tree live = null;
+    public static Tree voice = null;
+    public static Tree record = null;
+
+    // use for register bussiness tree
+    public static void registerBTree(Tree tree){
+        if (tree instanceof LiveTree){
+            live = tree;
+        }
+        if (tree instanceof VoiceTree){
+            voice = tree;
+        }
+        if (tree instanceof VoiceTree){
+            record = tree;
+        }
+    }
 
     private Logz() {
         throw new AssertionError("No instances.");

@@ -1,5 +1,6 @@
 package com.lizhi.ls.trees.business.base;
 
+import com.lizhi.ls.Logz;
 import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.trees.DebugTree;
 
@@ -12,9 +13,14 @@ import com.lizhi.ls.trees.DebugTree;
  * (1)super则使用DebugTree的日志输出配置器
  * (2)返回null使用全局默认配置器
  * 3.重写flatLog方法可以自定义log输出特性
- * 4.记得将业务树种植到Logz中
+ * TODO 4.记得在Logz中添加静态引用变量
+ * TODO 5.业务树打印不会生成到文件中(仅用于开发调试)
  */
-public abstract class ProductTree extends DebugTree {
+public abstract class ProductTree extends DebugTree{
+    public ProductTree(){
+        Logz.registerBTree(this);
+    }
+
     @Override
     protected ILogzConfig configer() {
         return super.configer();
