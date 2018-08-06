@@ -6,6 +6,8 @@ import android.util.Log;
 import com.lizhi.ls.trees.DebugTree;
 import com.lizhi.ls.trees.FileSaveTree;
 import com.lizhi.ls.trees.business.LiveTree;
+import com.lizhi.ls.trees.business.RecordTree;
+import com.lizhi.ls.trees.business.VoiceTree;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/01
@@ -23,11 +25,13 @@ public class MyApplication extends Application {
                     .configClassParserLevel(1)//config class paser level
                     .configMimLogLevel(Log.VERBOSE)//config mim output level
                     .configTagPrefix("LizhiFM");//config global tag prefix
-
-            Logz.plant(new LiveTree());
             Logz.plant(new DebugTree());
-            //TODO If need application context?
             Logz.plant(new FileSaveTree(this));
+            //Bussiness tree
+            Logz.plant(new LiveTree());
+            Logz.plant(new VoiceTree());
+            Logz.plant(new RecordTree());
+
         }
     }
 }

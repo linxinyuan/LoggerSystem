@@ -8,17 +8,17 @@ import com.lizhi.ls.trees.business.base.ProductTree;
 /**
  * Author : Create by Linxinyuan on 2018/08/06
  * Email : linxinyuan@lizhi.fm
- * Desc : Bussiness live tree sample
+ * Desc : Bussiness voice tree sample
  */
-public class LiveTree extends ProductTree {
+public class VoiceTree extends ProductTree {
     @Override
     protected ILogzConfig configer() {
         return new LogzConfiger()
-                .configTagPrefix(LogzTreeTags.TAG_LIVE);
+                .configTagPrefix(LogzTreeTags.TAG_VOICE);
     }
 
     @Override
     protected void flatLog(int type, String tag, String message) {
-        //To due with log with your bussiness
+
     }
 }
