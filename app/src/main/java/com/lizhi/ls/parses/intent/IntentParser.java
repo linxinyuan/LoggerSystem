@@ -53,7 +53,6 @@ public class IntentParser implements IParser<Intent> {
                 LogzConstant.BR);
         builder.append(String.format("%s = %s" + LogzConstant.BR, "Scheme", intent.getScheme()));
         builder.append(String.format("%s = %s" + LogzConstant.BR, "Action", intent.getAction()));
-        builder.append(String.format("%s = %s" + LogzConstant.BR, "DataString", intent.getDataString()));
         builder.append(String.format("%s = %s" + LogzConstant.BR, "Type", intent.getType()));
         builder.append(String.format("%s = %s" + LogzConstant.BR, "Package", intent.getPackage()));
         builder.append(String.format("%s = %s" + LogzConstant.BR, "ComponentInfo", intent.getComponent()));

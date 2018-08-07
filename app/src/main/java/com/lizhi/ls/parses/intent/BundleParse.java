@@ -21,12 +21,11 @@ public class BundleParse implements IParser<Bundle> {
     @Override
     public String parseString(ILogzConfig configer, Bundle bundle) {
         if (bundle != null) {
-            StringBuilder builder = new StringBuilder(bundle.getClass().getName() + " [" +
-                    LogzConstant.BR);
+            StringBuilder builder = new StringBuilder(bundle.getClass().getName() + " {" + LogzConstant.BR);
             for (String key : bundle.keySet()) {
                 builder.append(String.format("'%s' => %s " + LogzConstant.BR, key, LogzConvert.objectToString(configer, bundle.get(key))));
             }
-            builder.append("]");
+            builder.append("}");
             return builder.toString();
         }
         return null;

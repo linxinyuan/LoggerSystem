@@ -5,6 +5,8 @@ import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.parses.IParser;
 import com.lizhi.ls.parses.CollectionParser;
 import com.lizhi.ls.parses.MapParser;
+import com.lizhi.ls.parses.intent.BundleParse;
+import com.lizhi.ls.parses.intent.IntentParser;
 
 import java.security.PublicKey;
 import java.util.List;
@@ -33,7 +35,7 @@ public class LogzConstant {
     public static final String BR = System.getProperty("line.separator");// 换行符
 
     public static final Class<? extends IParser>[] DEFAULT_PARSE_CLASS = new Class[]{
-            CollectionParser.class, MapParser.class
+            CollectionParser.class, MapParser.class, IntentParser.class, BundleParse.class
     };
 
     public static List<IParser> getParserList(ILogzConfig configer) {
