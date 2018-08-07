@@ -2,6 +2,7 @@ package com.lizhi.ls.config;
 
 import android.util.Log;
 
+import com.lizhi.ls.Logz;
 import com.lizhi.ls.common.LogzConstant;
 import com.lizhi.ls.parses.IParser;
 
@@ -19,6 +20,7 @@ public class LogzConfiger implements ILogzConfig {
     private boolean isShowBorder = false;
     private int mimLogLevel = Log.VERBOSE;
     private List<IParser> mParserList;
+    private long maxFileSize = LogzConstant.LOG_FILE_MAX;
     private int mParserLevel = LogzConstant.MAX_CHILD_LEVEL;
 
     public LogzConfiger() {
@@ -59,6 +61,12 @@ public class LogzConfiger implements ILogzConfig {
     }
 
     @Override
+    public ILogzConfig configLogFileCutSize(long maxSize) {
+        this.maxFileSize = maxSize;
+        return this;
+    }
+
+    @Override
     public ILogzConfig addLogzParserClass(Class<? extends IParser>... parsers){
         mParserList = new ArrayList<IParser>();//list init
         for (Class<? extends IParser> cla : parsers) {
@@ -74,6 +82,11 @@ public class LogzConfiger implements ILogzConfig {
 
     public boolean isEnable() {
         return this.isEnable;
+    }
+
+    @Override
+    public long getLogFileCutSize() {
+        return this.maxFileSize;
     }
 
     public int getMimLogLevel() {

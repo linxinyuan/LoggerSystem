@@ -1,14 +1,14 @@
 package com.lizhi.ls.common;
 
+import android.os.Environment;
+
 import com.lizhi.ls.config.ILogzConfig;
-import com.lizhi.ls.config.LogzConfiger;
-import com.lizhi.ls.parses.IParser;
 import com.lizhi.ls.parses.CollectionParser;
+import com.lizhi.ls.parses.IParser;
 import com.lizhi.ls.parses.MapParser;
 import com.lizhi.ls.parses.intent.BundleParse;
 import com.lizhi.ls.parses.intent.IntentParser;
 
-import java.security.PublicKey;
 import java.util.List;
 
 /**
@@ -24,15 +24,18 @@ public class LogzConstant {
     public static final int DIVIDER_NORMAL = 3;
 
     public static final int LINE_MAX = 3 * 1024;// 最大日志长度
-    public static final int FILE_MAX = 10 * 1024;// 最大文件长度
     public static final int CALL_STACK_INDEX = 5;// 堆栈寻址下标
     public static final int JSON_PRINT_INDENT = 4;// Json输出缩进
     public static final int MAX_CHILD_LEVEL = 1;//Object最大解析层级(父子)
 
+    public static final long LOG_FILE_MAX = (long)Math.pow(1024, 2);
     public static final long LOG_FILE_INTERVAL = 3600000L;//时间切片
 
     public static final String TIP_OBJECT_NULL = "Object[object is null]";//空类
     public static final String BR = System.getProperty("line.separator");// 换行符
+
+    public static final String DEFAULT_SAVE_ROOT_PATH =
+            Environment.getExternalStorageDirectory().getPath() + "/LizhiFm/Logz/";
 
     public static final Class<? extends IParser>[] DEFAULT_PARSE_CLASS = new Class[]{
             CollectionParser.class, MapParser.class, IntentParser.class, BundleParse.class

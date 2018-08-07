@@ -25,8 +25,12 @@ public interface ILogzConfig {
     //设置解析类(父类与类成员)层级(考虑到反射效率,取值范围限定是0-2,默认为1)
     ILogzConfig configClassParserLevel(int parserLevel);
 
+    //设置文件切片粒度
+    ILogzConfig configLogFileCutSize(long maxSize);
+
     //添加自定义解析器
     ILogzConfig addLogzParserClass(Class<? extends IParser>... classes);
+
 
     //获取日志最小输出级别
     int getMimLogLevel();
@@ -40,11 +44,11 @@ public interface ILogzConfig {
     //获取是否输出日志标志位
     boolean isEnable();
 
+    long getLogFileCutSize();
+
     //获取特定标签头设置
     String getTagPrefix();
 
     //获取自定义转换器列表
     List<IParser> getParserList();
-
-
 }

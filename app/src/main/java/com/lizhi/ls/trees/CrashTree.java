@@ -2,9 +2,7 @@ package com.lizhi.ls.trees;
 
 import android.util.Log;
 
-import com.lizhi.ls.Logz;
 import com.lizhi.ls.base.Tree;
-import com.lizhi.ls.common.LogzTreeTags;
 import com.lizhi.ls.config.ILogzConfig;
 import com.lizhi.ls.config.LogzConfiger;
 
