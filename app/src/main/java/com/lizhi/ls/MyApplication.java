@@ -1,18 +1,14 @@
 package com.lizhi.ls;
 
-import android.app.ActivityManager;
 import android.app.Application;
-import android.os.Process;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.lizhi.ls.trees.DebugTree;
 import com.lizhi.ls.trees.FileSaveTree;
-import com.lizhi.ls.trees.business.LiveTree;
-import com.lizhi.ls.trees.business.RecordTree;
-import com.lizhi.ls.trees.business.VoiceTree;
 
-import java.util.Iterator;
+//import com.lizhi.ls.trees.business.LiveTree;
+//import com.lizhi.ls.trees.business.RecordTree;
+//import com.lizhi.ls.trees.business.VoiceTree;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/01
@@ -33,9 +29,9 @@ public class MyApplication extends Application {
                     .configTagPrefix("LizhiFM");//config global tag prefix
             Logz.plant(new DebugTree());
             Logz.plant(new FileSaveTree(this));
-            Logz.plantBTree(new LiveTree());
-            Logz.plantBTree(new VoiceTree());
-            Logz.plantBTree(new RecordTree());
+//            Logz.plantBTree(new LiveTree());
+//            Logz.plantBTree(new VoiceTree());
+//            Logz.plantBTree(new RecordTree());
         }
     }
 

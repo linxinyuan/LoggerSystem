@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logz.w("Logz output");
+                Logz.d("Logz output");
             }
         });
     }

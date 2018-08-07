@@ -5,8 +5,8 @@ import com.lizhi.ls.config.LogzConfiger;
 import com.lizhi.ls.trees.ITree;
 import com.lizhi.ls.trees.SoulsTree;
 import com.lizhi.ls.base.Tree;
-import com.lizhi.ls.trees.business.LiveTree;
-import com.lizhi.ls.trees.business.VoiceTree;
+//import com.lizhi.ls.trees.business.LiveTree;
+//import com.lizhi.ls.trees.business.VoiceTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,35 +20,35 @@ import static java.util.Collections.unmodifiableList;
  */
 public final class Logz {
 
-    public static Tree live = null;
-    public static Tree voice = null;
-    public static Tree record = null;
-
-    // use for register bussiness tree
-    public static void plantBTree(Tree tree){
-        if (tree instanceof LiveTree){
-            live = tree;
-        }
-        if (tree instanceof VoiceTree){
-            voice = tree;
-        }
-        if (tree instanceof VoiceTree){
-            record = tree;
-        }
-    }
-
-    // use for unregister bussiness tree
-    public static void unrootBTree(Tree tree){
-        if (tree instanceof LiveTree){
-            live = null;
-        }
-        if (tree instanceof VoiceTree){
-            voice = null;
-        }
-        if (tree instanceof VoiceTree){
-            record = null;
-        }
-    }
+//    public static Tree live = null;
+//    public static Tree voice = null;
+//    public static Tree record = null;
+//
+//    // use for register bussiness tree
+//    public static void plantBTree(Tree tree){
+//        if (tree instanceof LiveTree){
+//            live = tree;
+//        }
+//        if (tree instanceof VoiceTree){
+//            voice = tree;
+//        }
+//        if (tree instanceof VoiceTree){
+//            record = tree;
+//        }
+//    }
+//
+//    // use for unregister bussiness tree
+//    public static void unrootBTree(Tree tree){
+//        if (tree instanceof LiveTree){
+//            live = null;
+//        }
+//        if (tree instanceof VoiceTree){
+//            voice = null;
+//        }
+//        if (tree instanceof VoiceTree){
+//            record = null;
+//        }
+//    }
 
     private static final Tree TREE_OF_SOULS = new SoulsTree();
     private static final List<Tree> FOREST = new ArrayList<>();

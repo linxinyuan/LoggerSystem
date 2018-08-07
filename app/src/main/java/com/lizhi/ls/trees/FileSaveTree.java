@@ -50,7 +50,7 @@ public class FileSaveTree extends Tree {
     //private static final String FILE_NAME_WARN = "warn";
     //private static final String FILE_NAME_ERROR = "error";
     //private static final String FILE_NAME_ASSERT = "assert";
-    private static final String FILE_NAME_SUFFIX = "_log.txt";
+    private static final String FILE_NAME_SUFFIX = "_log.csv";
 
     //private static final Set<StandardOpenOption> read = EnumSet.of(READ);
     //private static final Set<StandardOpenOption> write = EnumSet.of(WRITE);

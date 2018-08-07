@@ -9,9 +9,9 @@ import static com.lizhi.ls.common.LogzTreeTags.TAG_CRASH;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_DEBUG;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_FILE;
 import static com.lizhi.ls.common.LogzTreeTags.TAG_GLOBAL;
-import static com.lizhi.ls.common.LogzTreeTags.TAG_LIVE;
-import static com.lizhi.ls.common.LogzTreeTags.TAG_RECORD;
-import static com.lizhi.ls.common.LogzTreeTags.TAG_VOICE;
+//import static com.lizhi.ls.common.LogzTreeTags.TAG_LIVE;
+//import static com.lizhi.ls.common.LogzTreeTags.TAG_RECORD;
+//import static com.lizhi.ls.common.LogzTreeTags.TAG_VOICE;
 
 /**
  * Author : Create by Linxinyuan on 2018/08/06
@@ -19,7 +19,8 @@ import static com.lizhi.ls.common.LogzTreeTags.TAG_VOICE;
  * Desc : android dev
  */
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({TAG_GLOBAL,TAG_DEBUG, TAG_FILE, TAG_CRASH, TAG_LIVE, TAG_VOICE, TAG_RECORD})
+@StringDef({TAG_GLOBAL,TAG_DEBUG, TAG_FILE, TAG_CRASH})
+//TAG_LIVE, TAG_VOICE, TAG_RECORD
 public @interface LogzTreeTags {
     //Global
     String TAG_GLOBAL = "LizhiFM";
@@ -28,7 +29,7 @@ public @interface LogzTreeTags {
     String TAG_CRASH = "LizhiFM_Crash";
     String TAG_FILE = "LizhiFM_File";
     //Product Business
-    String TAG_LIVE = "LizhiFM_Live";
-    String TAG_VOICE = "LizhiFM_Voice";
-    String TAG_RECORD = "LizhiFM_Record";
+//    String TAG_LIVE = "LizhiFM_Live";
+//    String TAG_VOICE = "LizhiFM_Voice";
+//    String TAG_RECORD = "LizhiFM_Record";
 }
