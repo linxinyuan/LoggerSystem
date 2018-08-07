@@ -305,6 +305,7 @@ public abstract class Tree implements ITree {
         return stringList;
     }
 
+    // custom > global > class
     private String generateTag() {
         String tempTag = localTags.get();
         //custom tag
@@ -313,11 +314,17 @@ public abstract class Tree implements ITree {
             return tempTag;
         }
         // global tag
-        if (!TextUtils.isEmpty(mTLogConfig.getTagPrefix())) {
-            return mTLogConfig.getTagPrefix();
+        tempTag = mTLogConfig.getTagPrefix();
+        if (!TextUtils.isEmpty(tempTag)) {
+            return tempTag;
+        }
+        // class name
+        tempTag = createStackElementTag(getCurrentStackTrace());
+        if (!TextUtils.isEmpty(tempTag)){
+            return tempTag;
         }
         // class tag
-        return createStackElementTag(getCurrentStackTrace());
+        return tempTag;
     }
 
     private String createStackElementTag(StackTraceElement element) {
