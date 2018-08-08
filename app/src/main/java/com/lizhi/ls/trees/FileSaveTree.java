@@ -25,11 +25,11 @@ public class FileSaveTree extends Tree {
     protected ILogzConfig configer() {
         return new LogzConfiger()
                 .configShowBorders(false)//配置输出格式化为否
-                .configMimLogLevel(Log.WARN);//配置输出到文件的最小级别Warn
+                .configMimLogLevel(Log.INFO);//配置输出到文件的最小级别Warn
     }
 
     @Override
     protected void log(int type, String tag, String message) {
-        lsMannager.saveMessageToSDCard(type, tag, message);
+        lsMannager.saveMessageToSDCard(getConfiger(), type, tag, message);
     }
 }

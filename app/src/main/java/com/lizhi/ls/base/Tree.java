@@ -44,6 +44,10 @@ public abstract class Tree implements ITree {
         mTLogConfig = (configer() == null ? Logz.getLogGlobalConfigCenter() : configer());
     }
 
+    public ILogzConfig getConfiger(){
+        return mTLogConfig;
+    }
+
     public ITree setTag(String tag) {
         if (!TextUtils.isEmpty(tag) && mTLogConfig.isEnable()) {
             localTags.set(tag);

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.lizhi.ls.Logz;
 import com.lizhi.ls.common.LogzConstant;
+import com.lizhi.ls.config.ILogzConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,12 +35,14 @@ public final class LogSaveManager {
     private Context mContext;
 
     private File mLogFile;
+    private File mAchieveFile;
     private String loginUserId;
     private long currentTarget;
     private boolean isPrintPhoneMsg;
     private ExecutorService executor;
 
-    private static final String FILE_NAME_SUFFIX = "_log.csv";
+    private static final String FILE_ACHIEVE = "/Achieve";
+    private static final String FILE_NAME_SUFFIX = "_log.txt";
     private static final String FILE_DEFAULT_UNLOGIN = "unLogin";
 
     public LogSaveManager(Context mContext) {
@@ -48,7 +51,7 @@ public final class LogSaveManager {
         executor = Executors.newSingleThreadExecutor();
     }
 
-    public void saveMessageToSDCard(final int type, final String tag, final String message) {
+    public void saveMessageToSDCard(final ILogzConfig configer, final int type, final String tag, final String message) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Logz.e("sdcard unmounted, skip dump exception");
             return;
@@ -74,6 +77,11 @@ public final class LogSaveManager {
             dir.mkdirs();
         }
 
+        File achieve = new File(dir.getAbsolutePath() + FILE_ACHIEVE);
+        if (!achieve.exists()) {
+            achieve.mkdirs();
+        }
+
         mLogFile = new File(dir.getAbsolutePath() + File.separator + "com.yibasan.lizhifm" + FILE_NAME_SUFFIX);
         try {
             if (!mLogFile.exists()) {
@@ -81,6 +89,19 @@ public final class LogSaveManager {
                 isPrintPhoneMsg = true;
             } else {
                 isPrintPhoneMsg = false;
+            }
+
+            //文件大小切片
+            if (mLogFile.length() >= configer.getLogFileCutSize()){
+                //文件重命名与移动
+                long achieveTime = System.currentTimeMillis();
+                mAchieveFile = new File(achieve.getAbsolutePath()
+                        + File.separator + "com.yibasan.lizhifm_"
+                        + String.valueOf(achieveTime) + FILE_NAME_SUFFIX);
+                mLogFile.renameTo(mAchieveFile);
+                //新开文件打印日志
+                saveMessageToSDCard(configer, type, tag, message);
+                return;
             }
 
             if (isPrintPhoneMsg)

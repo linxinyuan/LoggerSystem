@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.lizhi.ls.trees.ITree;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logz.w("dfdfd");
+                ITree tag = Logz.tag("Tree");
+                for (int i = 0; i < 2; i++) {
+                    tag.d("good idea");
+                }
             }
         });
     }

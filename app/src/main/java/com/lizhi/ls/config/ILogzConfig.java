@@ -31,7 +31,6 @@ public interface ILogzConfig {
     //添加自定义解析器
     ILogzConfig addLogzParserClass(Class<? extends IParser>... classes);
 
-
     //获取日志最小输出级别
     int getMimLogLevel();
 
@@ -44,6 +43,7 @@ public interface ILogzConfig {
     //获取是否输出日志标志位
     boolean isEnable();
 
+    //设置日志文件切片最大长度
     long getLogFileCutSize();
 
     //获取特定标签头设置
