@@ -26,12 +26,5 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
             }
         });
-
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++){
-            Logz.d(new NullPointerException("test print file"));
-        }
-        long end = System.currentTimeMillis();
-        Log.e("time", String.valueOf(end - start));
     }
 }
